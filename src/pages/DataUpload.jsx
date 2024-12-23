@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/DataUpload.css"; // Importa el estilo desde styles
 
 function DataUpload() {
   const [name, setName] = useState("");
@@ -10,13 +11,9 @@ function DataUpload() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Guardar los datos en el localStorage
     const storedCards = JSON.parse(localStorage.getItem("cards")) || [];
     const newCard = { name, phrase, image: URL.createObjectURL(image) };
     localStorage.setItem("cards", JSON.stringify([...storedCards, newCard]));
-
-    // Limpiar el formulario y redirigir
     setName("");
     setPhrase("");
     setImage(null);
@@ -24,7 +21,7 @@ function DataUpload() {
   };
 
   return (
-    <div>
+    <div className="data-upload">
       <h1>Cargar Foto, Nombre y Frase</h1>
       <form onSubmit={handleSubmit}>
         <input
