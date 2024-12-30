@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { uploadCard } from "../utils/firebaseUtils";
 import { useNavigate } from "react-router-dom";
 import "../styles/DataUpload.css"; // Importa el estilo desde styles
 
@@ -9,20 +10,23 @@ function DataUpload() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const storedCards = JSON.parse(localStorage.getItem("cards")) || [];
-    const newCard = { name, phrase, image: URL.createObjectURL(image) };
-    localStorage.setItem("cards", JSON.stringify([...storedCards, newCard]));
-    setName("");
-    setPhrase("");
-    setImage(null);
-    navigate("/cards");
+    try {
+      const newCard = await uploadCard({ name, phrase, imageFile: image });
+      console.log("Tarjeta creada:", newCard);
+      setName("");
+      setPhrase("");
+      setImage(null);
+      alert("Tarjeta creada exitosamente");
+    } catch (error) {
+      console.error("Error al crear tarjeta:", error);
+    }
   };
 
   return (
-    <div className="data-upload">
-      <h1>Cargar Foto, Nombre y Frase</h1>
+    <div>
+      <h1>Cargar Tarjeta</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
