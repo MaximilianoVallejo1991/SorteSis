@@ -1,12 +1,41 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./../styles/Home.css"; // Asegúrate de tener este archivo para estilos.
 
-function Home() {
+const Home = () => {
+  const navigate = useNavigate();
+
+  // Funciones para manejar los botones
+  const handleOpenDraw = () => {
+    navigate("/upload");
+  };
+
+  const handleSystemDraw = () => {
+    navigate("/upload");
+  };
+
+  const handleAddParticipants = () => {
+    navigate("/upload");
+  };
+
   return (
-    <div>
-      <h1>Bienvenido a la Aplicación</h1>
-      <p>¡Explora y empieza a cargar tus datos!</p>
+    <div className="home-container">
+      <h1>¡Bienvenido a SorteSis!</h1>
+      <p>Elige una de las siguientes opciones para comenzar:</p>
+
+      <div className="button-group">
+        <button className="home-button" onClick={handleOpenDraw}>
+          Iniciar sorteo abierto
+        </button>
+        <button className="home-button" onClick={handleSystemDraw}>
+          Iniciar sorteo de Sistemas
+        </button>
+        <button className="home-button" onClick={handleAddParticipants}>
+          Agregar nuevos participantes
+        </button>
+      </div>
     </div>
   );
-}
+};
 
 export default Home;
