@@ -1,14 +1,23 @@
-import { db, storage } from "../firebaseConfig";
+import axios from "axios";
+import { db } from "../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-// Subir imagen al Storage y guardar datos en Firestore
+
 export const uploadCard = async ({ name, phrase, imageFile }) => {
   try {
-    // Subir la imagen al Storage
-    const storageRef = ref(storage, `images/${Date.now()}-${imageFile.name}`);
-    const snapshot = await uploadBytes(storageRef, imageFile);
-    const imageUrl = await getDownloadURL(snapshot.ref);
+    // Crear el FormData para subir la imagen
+    const formData = new FormData();
+    formData.append("file", imageFile); // El archivo de imagen
+    formData.append("upload_preset", "ml_default"); // Tu upload preset de Cloudinary
+    formData.append("folder", "cards"); // Carpeta en Cloudinary (opcional)
+
+    // Subir la imagen a Cloudinary
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dc3kybsmr/image/upload",
+      formData
+    );
+
+    const imageUrl = response.data.secure_url; // URL pública de la imagen subida
 
     // Guardar datos en Firestore
     const docRef = await addDoc(collection(db, "cards"), {

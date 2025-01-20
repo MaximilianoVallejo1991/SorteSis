@@ -24,6 +24,7 @@ function DataUpload() {
     }
   };
 
+  
   return (
     <div>
       <h1>Cargar Tarjeta</h1>
