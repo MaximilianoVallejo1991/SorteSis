@@ -26,9 +26,9 @@ function DataUpload() {
 
   
   return (
-    <div>
+    <div className="container">
       <h1>Cargar Tarjeta</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="data-upload">
         <input
           type="text"
           placeholder="Nombre"
