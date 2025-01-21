@@ -7,7 +7,7 @@ const Home = () => {
 
   // Funciones para manejar los botones
   const handleOpenDraw = () => {
-    navigate("/upload");
+    navigate("/cardsPage");
   };
 
   const handleSystemDraw = () => {

@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> {/* Página principal */}
         <Route path="/upload" element={<DataUpload />} /> {/* Cargar datos */}
-        <Route path="/cards" element={<CardsPage />} /> {/* Mostrar tarjetas */}
+        <Route path="/cardsPage" element={<CardsPage />} /> {/* Mostrar tarjetas */}
       </Routes>
     </Router>
   );

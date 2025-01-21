@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import Card from "../components/Card";
+import "../styles/CardsPage.css";
 
 function CardsPage() {
   const [cards, setCards] = useState([]);
@@ -24,9 +25,9 @@ function CardsPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Tarjetas</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+    <div className="cards-page">
+      <h1 className="cards-title">Tarjetas</h1>
+      <div className="cards-container">
         {cards.map((card) => (
           <Card key={card.id} name={card.name} phrase={card.phrase} image={card.imageUrl} />
         ))}
