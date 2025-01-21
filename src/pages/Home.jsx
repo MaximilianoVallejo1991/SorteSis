@@ -1,13 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./../styles/Home.css"; // Asegúrate de tener este archivo para estilos.
+import "./../styles/Home.css"; 
+
 
 const Home = () => {
   const navigate = useNavigate();
 
   // Funciones para manejar los botones
   const handleOpenDraw = () => {
-    navigate("/cardsPage");
+    navigate("/rafflePage");
   };
 
   const handleSystemDraw = () => {
@@ -25,10 +26,10 @@ const Home = () => {
 
       <div className="button-group">
         <button className="home-button" onClick={handleOpenDraw}>
-          Iniciar sorteo abierto
+          Sorteo abierto
         </button>
         <button className="home-button" onClick={handleSystemDraw}>
-          Iniciar sorteo de Sistemas
+          Sorteo de Sistemas
         </button>
         <button className="home-button" onClick={handleAddParticipants}>
           Agregar nuevos participantes

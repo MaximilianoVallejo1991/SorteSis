@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import DataUpload from "./pages/DataUpload";
 import CardsPage from "./pages/CardsPage";
+import RafflePage from "./pages/RafflePage";
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
         <Route path="/upload" element={<DataUpload />} /> {/* Cargar datos */}
         <Route path="/cardsPage" element={<CardsPage />} /> {/* Mostrar tarjetas */}
       </Routes>
+      <Route path="/rafflePage" element={<RafflePage />} /> {/* Mostrar tarjetas */}
     </Router>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import Card from "../components/Card";
@@ -6,6 +7,12 @@ import "../styles/CardsPage.css";
 
 function CardsPage() {
   const [cards, setCards] = useState([]);
+
+
+  const navigate = useNavigate();
+  const handleAddParticipants = () => {
+    navigate("/upload");
+  };
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -32,6 +39,11 @@ function CardsPage() {
           <Card key={card.id} name={card.name} phrase={card.phrase} image={card.imageUrl} />
         ))}
       </div>
+
+      <button className="home-button" onClick={handleAddParticipants}>
+          Agregar nuevos participantes
+        </button>
+
     </div>
   );
 }
