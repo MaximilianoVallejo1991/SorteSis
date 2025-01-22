@@ -4,17 +4,19 @@ import Home from "./pages/Home";
 import DataUpload from "./pages/DataUpload";
 import CardsPage from "./pages/CardsPage";
 import RafflePage from "./pages/RafflePage";
+import SelectionPage from "./pages/SelectionPage";
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} /> {/* Página principal */}
-        <Route path="/upload" element={<DataUpload />} /> {/* Cargar datos */}
-        <Route path="/cardsPage" element={<CardsPage />} /> {/* Mostrar tarjetas */}
+        <Route path="/" element={<Home />} /> 
+        <Route path="/upload" element={<DataUpload />} /> 
+        <Route path="/cardsPage" element={<CardsPage />} /> 
+        <Route path="/rafflePage" element={<RafflePage />} /> 
+        <Route path="/selection" element={<SelectionPage />} />
       </Routes>
-      <Route path="/rafflePage" element={<RafflePage />} /> {/* Mostrar tarjetas */}
     </Router>
   );
 }

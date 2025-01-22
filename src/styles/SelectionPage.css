@@ -1,0 +1,76 @@
+.parent {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 8px;
+  }
+  
+  .div1, .div2, .div3, .div4, .div5, .div6 {
+    border: 1px solid #ddd;
+    padding: 16px;
+    background: #f9f9f9;
+  }
+  
+  .div1, .div2 {
+    grid-column: span 5 / span 5;
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+  }
+  
+  .div2 {
+    grid-row-start: 3;
+  }
+  
+  .div3 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 2;
+    grid-row-start: 5;
+  }
+  
+  .div4 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 5;
+  }
+  
+  .div5 {
+    grid-column-start: 6;
+    grid-row-start: 5;
+  }
+  
+  .div6 {
+    grid-column-start: 6;
+    grid-row-start: 6;
+  }
+  
+  /* Carousel estilos */
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+  }
+  
+  .carousel-item {
+    flex: 0 0 auto;
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    background: #fff;
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .carousel-item:hover {
+    background: #f0f0f0;
+  }
+  

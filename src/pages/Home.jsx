@@ -12,12 +12,10 @@ const Home = () => {
   };
 
   const handleSystemDraw = () => {
-    navigate("/upload");
+    navigate("/selection");
   };
 
-  const handleAddParticipants = () => {
-    navigate("/upload");
-  };
+
 
   return (
     <div className="home-container">
@@ -31,9 +29,7 @@ const Home = () => {
         <button className="home-button" onClick={handleSystemDraw}>
           Sorteo de Sistemas
         </button>
-        <button className="home-button" onClick={handleAddParticipants}>
-          Agregar nuevos participantes
-        </button>
+
       </div>
     </div>
   );
