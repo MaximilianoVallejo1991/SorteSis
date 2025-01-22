@@ -7,7 +7,8 @@ import "../styles/SelectionPage.css"; // Estilos para esta página
 
 const SelectionPage = () => {
   const [cards, setCards] = useState([]); // Tarjetas del carousel 1
-  const [selectedCard, setSelectedCard] = useState(null); // Tarjeta seleccionada
+  const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -28,8 +29,20 @@ const SelectionPage = () => {
 
   // Maneja el clic en una tarjeta del carousel 1
   const handleCardClick = (card) => {
-    setSelectedCard(card);
+    setSelectedCards((prevSelectedCards) => {
+      const existingCard = prevSelectedCards.find((item) => item.id === card.id);
+      if (existingCard) {
+        // Si la tarjeta ya está en la lista, incrementa el contador de "chances"
+        return prevSelectedCards.map((item) =>
+          item.id === card.id ? { ...item, chances: item.chances + 1 } : item
+        );
+      } else {
+        // Si la tarjeta no está en la lista, agrégala con un contador de "chances" inicializado en 1
+        return [...prevSelectedCards, { ...card, chances: 1 }];
+      }
+    });
   };
+
 
   return (
     <div className="parent">
@@ -48,6 +61,9 @@ const SelectionPage = () => {
             </div>
           ))}
         </div>
+        <button className="navigate-button" onClick={() => navigate("/upload")}>
+          Agregar
+        </button>
       </div>
 
       {/* Carousel 2 */}
@@ -57,18 +73,24 @@ const SelectionPage = () => {
           {/* Aquí agregarás datos de otras tablas en Firestore */}
           <p>Datos en construcción...</p>
         </div>
+        <button className="navigate-button" onClick={() => navigate("/upload")}>
+          Agregar
+        </button>
       </div>
 
       {/* Detalles de la tarjeta seleccionada */}
       <div className="div3">
-        <h2>Detalle de la Tarjeta</h2>
-        {selectedCard ? (
-          <>
-            <h3>{selectedCard.name}</h3>
-            <p>{selectedCard.phrase}</p>
-          </>
+        <h2>Listado de Tarjetas Seleccionadas</h2>
+        {selectedCards.length > 0 ? (
+          <ul>
+            {selectedCards.map((card) => (
+              <li key={card.id}>
+                <strong>{card.name}:</strong> {card.phrase} - <em>Chances: {card.chances}</em>
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p>Haz clic en una tarjeta para ver sus detalles.</p>
+          <p>Haz clic en una tarjeta para agregarla al listado.</p>
         )}
       </div>
 

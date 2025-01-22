@@ -12,7 +12,7 @@
   }
   
   .div1, .div2 {
-    grid-column: span 5 / span 5;
+  grid-column: span 4 / span 4;
     grid-row: span 2 / span 2;
     grid-column-start: 2;
   }
@@ -74,3 +74,27 @@
     background: #f0f0f0;
   }
   
+
+    /* Botones de navegación */
+  .navigate-button {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .navigate-button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Ajusta la posición relativa de los carousels para que los botones se posicionen correctamente */
+  .div1,
+  .div2 {
+    position: relative;
+  }
