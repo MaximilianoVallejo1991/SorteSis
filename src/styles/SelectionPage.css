@@ -1,5 +1,7 @@
 .parent {
+    margin-top: 2vh;
     display: grid;
+    height: 96vh;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
     gap: 8px;
@@ -12,7 +14,7 @@
   }
   
   .div1, .div2 {
-  grid-column: span 4 / span 4;
+  grid-column: span 5 / span 5;
     grid-row: span 2 / span 2;
     grid-column-start: 2;
   }
@@ -26,6 +28,7 @@
     grid-row: span 2 / span 2;
     grid-column-start: 2;
     grid-row-start: 5;
+    overflow-y: scroll;
   }
   
   .div4 {
@@ -55,6 +58,7 @@
   .carousel-item {
     flex: 0 0 auto;
     width: 120px;
+    height: 140px;
     text-align: center;
     cursor: pointer;
     border: 1px solid #ccc;
@@ -64,8 +68,8 @@
   }
   
   .carousel-item img {
-    width: 100%;
-    height: auto;
+    width: 90%;
+    height: 50%;
     object-fit: cover;
     border-radius: 4px;
   }

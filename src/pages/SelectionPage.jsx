@@ -48,7 +48,7 @@ const SelectionPage = () => {
     <div className="parent">
       {/* Carousel 1 */}
       <div className="div1">
-        <h2>Carousel 1 - Tarjetas</h2>
+
         <div className="carousel">
           {cards.map((card) => (
             <div
