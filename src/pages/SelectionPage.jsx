@@ -2,13 +2,40 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Card from "../components/Card";
 import "../styles/SelectionPage.css"; // Estilos para esta página
+
 
 const SelectionPage = () => {
   const [cards, setCards] = useState([]); // Tarjetas del carousel 1
   const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
   const navigate = useNavigate();
+  
+  const sliderSettings = {
+    dots: true, // Muestra indicadores
+    infinite: false, // Cicla a través de los elementos
+    speed: 500,
+    slidesToShow: 6, // Cantidad de tarjetas visibles
+    slidesToScroll: 1,
+    swipe: true, // Habilita el swipe
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -27,40 +54,62 @@ const SelectionPage = () => {
     fetchCards();
   }, []);
 
-  // Maneja el clic en una tarjeta del carousel 1
+  // Maneja el clic en una tarjeta del carrusel 1
   const handleCardClick = (card) => {
+    // Agrega la tarjeta al listado seleccionado y elimina del carrusel
     setSelectedCards((prevSelectedCards) => {
       const existingCard = prevSelectedCards.find((item) => item.id === card.id);
       if (existingCard) {
         // Si la tarjeta ya está en la lista, incrementa el contador de "chances"
-        return prevSelectedCards.map((item) =>
-          item.id === card.id ? { ...item, chances: item.chances + 1 } : item
-        );
+        return prevSelectedCards;
       } else {
         // Si la tarjeta no está en la lista, agrégala con un contador de "chances" inicializado en 1
         return [...prevSelectedCards, { ...card, chances: 1 }];
       }
     });
+
+    // Elimina la tarjeta del carrusel
+    setCards((prevCards) => prevCards.filter((item) => item.id !== card.id));
   };
 
+
+    // Incrementa el contador de "chances"
+    const increaseChances = (cardId) => {
+      setSelectedCards((prevSelectedCards) =>
+        prevSelectedCards.map((card) =>
+          card.id === cardId ? { ...card, chances: card.chances + 1 } : card
+        )
+      );
+    };
+  
+    // Decrementa el contador de "chances"
+    const decreaseChances = (cardId) => {
+      setSelectedCards((prevSelectedCards) =>
+        prevSelectedCards.map((card) =>
+          card.id === cardId && card.chances > 0
+            ? { ...card, chances: card.chances - 1 }
+            : card
+        )
+      );
+    };
+  
 
   return (
     <div className="parent">
       {/* Carousel 1 */}
       <div className="div1">
 
-        <div className="carousel">
+        <Slider {...sliderSettings}>
           {cards.map((card) => (
-            <div
-              key={card.id}
-              className="carousel-item"
+            <div key={card.id} className="carousel-item"
               onClick={() => handleCardClick(card)}
             >
               <img src={card.imageUrl} alt={card.name} />
               <p>{card.name}</p>
             </div>
           ))}
-        </div>
+        </Slider>
+
         <button className="navigate-button" onClick={() => navigate("/upload")}>
           Agregar
         </button>
@@ -85,7 +134,22 @@ const SelectionPage = () => {
           <ul>
             {selectedCards.map((card) => (
               <li key={card.id}>
-                <strong>{card.name}:</strong> {card.phrase} - <em>Chances: {card.chances}</em>
+                <strong>{card.name}:</strong> {card.phrase} -{" "}
+                <em>
+                  Chances: {card.chances}{" "}
+                  <button
+                    className="chances-button"
+                    onClick={() => increaseChances(card.id)}
+                  >
+                    +
+                  </button>
+                  <button
+                    className="chances-button"
+                    onClick={() => decreaseChances(card.id)}
+                  >
+                    -
+                  </button>
+                </em>
               </li>
             ))}
           </ul>
