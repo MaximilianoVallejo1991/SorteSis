@@ -13,7 +13,7 @@ const SelectionPage = () => {
   const [cards, setCards] = useState([]); // Tarjetas del carousel 1
   const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
   const navigate = useNavigate();
-  
+
   const sliderSettings = {
     dots: true, // Muestra indicadores
     infinite: false, // Cicla a través de los elementos
@@ -73,25 +73,34 @@ const SelectionPage = () => {
   };
 
 
-    // Incrementa el contador de "chances"
-    const increaseChances = (cardId) => {
-      setSelectedCards((prevSelectedCards) =>
-        prevSelectedCards.map((card) =>
-          card.id === cardId ? { ...card, chances: card.chances + 1 } : card
-        )
-      );
-    };
-  
-    // Decrementa el contador de "chances"
-    const decreaseChances = (cardId) => {
-      setSelectedCards((prevSelectedCards) =>
-        prevSelectedCards.map((card) =>
-          card.id === cardId && card.chances > 0
-            ? { ...card, chances: card.chances - 1 }
-            : card
-        )
-      );
-    };
+  // Incrementa el contador de "chances"
+  const increaseChances = (cardId) => {
+    setSelectedCards((prevSelectedCards) =>
+      prevSelectedCards.map((card) =>
+        card.id === cardId ? { ...card, chances: card.chances + 1 } : card
+      )
+    );
+  };
+
+  // Decrementa el contador de "chances"
+  const decreaseChances = (cardId) => {
+    setSelectedCards((prevSelectedCards) => {
+      return prevSelectedCards.reduce((acc, card) => {
+        if (card.id === cardId) {
+          if (card.chances > 1) {
+            // Si tiene más de 1 chance, solo se reduce en 1
+            acc.push({ ...card, chances: card.chances - 1 });
+          } else {
+            // Si llega a 0, lo eliminamos de selectedCards y lo volvemos a agregar al carrusel
+            setCards((prevCards) => [...prevCards, card]);
+          }
+        } else {
+          acc.push(card);
+        }
+        return acc;
+      }, []);
+    });
+  };
   
 
   return (
@@ -129,34 +138,30 @@ const SelectionPage = () => {
 
       {/* Detalles de la tarjeta seleccionada */}
       <div className="div3">
-        <h2>Listado de Tarjetas Seleccionadas</h2>
-        {selectedCards.length > 0 ? (
-          <ul>
-            {selectedCards.map((card) => (
-              <li key={card.id}>
-                <strong>{card.name}:</strong> {card.phrase} -{" "}
-                <em>
-                  Chances: {card.chances}{" "}
-                  <button
-                    className="chances-button"
-                    onClick={() => increaseChances(card.id)}
-                  >
-                    +
-                  </button>
-                  <button
-                    className="chances-button"
-                    onClick={() => decreaseChances(card.id)}
-                  >
-                    -
-                  </button>
-                </em>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Haz clic en una tarjeta para agregarla al listado.</p>
-        )}
-      </div>
+  <div className="header">
+    <h3>Participantes</h3>
+    <h3>Chances</h3>
+  </div>
+  {selectedCards.length > 0 ? (
+    <ul>
+      {selectedCards.map((card) => (
+        <li className="item" key={card.id}>
+          <span className="participant-name"><strong>{card.name}:</strong></span>
+          <div className="chances-container">
+            <span className="chances-number">{card.chances}</span>
+            <div className="chances-buttons">
+              <button className="chances-button" onClick={() => increaseChances(card.id)}>+</button>
+              <button className="chances-button" onClick={() => decreaseChances(card.id)}>-</button>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>Haz clic en una tarjeta para agregarla al listado.</p>
+  )}
+</div>
+
 
       {/* Espacios adicionales */}
       <div className="div4">Div 4</div>

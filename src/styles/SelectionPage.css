@@ -56,6 +56,7 @@
   }
   
   .carousel-item {
+    gap: 16px;
     flex: 0 0 auto;
     width: 120px;
     height: 140px;
@@ -102,3 +103,71 @@
   .div2 {
     position: relative;
   }
+
+  li {
+
+    width: 90%;
+
+  }
+
+/* Estilo del encabezado de la sección */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+/* Estructura de los elementos de la lista */
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+/* Nombre del participante alineado a la izquierda */
+.participant-name {
+  flex: 1;
+  text-align: left;
+}
+
+/* Contenedor de chances alineado a la derecha */
+.chances-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Número de chances centrado */
+.chances-number {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Contenedor para los botones */
+.chances-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+/* Estilos para los botones */
+.chances-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.chances-button:hover {
+  background-color: #0056b3;
+}
