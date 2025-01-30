@@ -32,3 +32,31 @@ export const uploadCard = async ({ name, phrase, imageFile }) => {
     throw error;
   }
 };
+
+export const uploadFoodCard = async ({ name, imageFile }) => {
+  try {
+    // Subir la imagen a Cloudinary
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "ml_default");
+    formData.append("folder", "food_cards");
+
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dc3kybsmr/image/upload",
+      formData
+    );
+
+    const imageUrl = response.data.secure_url;
+
+    // Guardar datos en Firestore en la colección "food_cards"
+    const docRef = await addDoc(collection(db, "food_cards"), {
+      name,
+      imageUrl,
+    });
+
+    return { id: docRef.id, name, imageUrl };
+  } catch (error) {
+    console.error("Error al subir tarjeta de comida:", error);
+    throw error;
+  }
+};

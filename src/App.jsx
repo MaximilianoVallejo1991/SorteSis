@@ -5,6 +5,7 @@ import DataUpload from "./pages/DataUpload";
 import CardsPage from "./pages/CardsPage";
 import RafflePage from "./pages/RafflePage";
 import SelectionPage from "./pages/SelectionPage";
+import FoodUpload from "./pages/FoodUpload";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/cardsPage" element={<CardsPage />} /> 
         <Route path="/rafflePage" element={<RafflePage />} /> 
         <Route path="/selection" element={<SelectionPage />} />
+        <Route path="/foodUpload" element={<FoodUpload />} />
       </Routes>
     </Router>
   );

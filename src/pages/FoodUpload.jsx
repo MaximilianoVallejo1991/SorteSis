@@ -1,45 +1,34 @@
 import React, { useState } from "react";
-import { uploadCard } from "../utils/firebaseUtils";
+import { uploadFoodCard } from "../utils/firebaseUtils";
 import { useNavigate } from "react-router-dom";
-import "../styles/DataUpload.css"; 
+import "../styles/DataUpload.css";
 
-function DataUpload() {
+function FoodUpload() {
   const [name, setName] = useState("");
-  const [phrase, setPhrase] = useState("");
   const [image, setImage] = useState(null);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newCard = await uploadCard({ name, phrase, imageFile: image });
-      console.log("Tarjeta creada:", newCard);
+      await uploadFoodCard({ name, imageFile: image });
       setName("");
-      setPhrase("");
       setImage(null);
-      alert("Tarjeta creada exitosamente");
+      alert("Tarjeta de comida creada exitosamente");
     } catch (error) {
-      console.error("Error al crear tarjeta:", error);
+      console.error("Error al crear tarjeta de comida:", error);
     }
   };
 
-  
   return (
     <div className="container">
-      <h1 className="title">Cargar Tarjeta</h1>
+      <h1 className="title">Cargar Tarjeta de Comida</h1>
       <form onSubmit={handleSubmit} className="data-upload">
         <input
           type="text"
-          placeholder="Nombre"
+          placeholder="Nombre de la comida"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Frase"
-          value={phrase}
-          onChange={(e) => setPhrase(e.target.value)}
           required
         />
         <input
@@ -54,4 +43,4 @@ function DataUpload() {
   );
 }
 
-export default DataUpload;
+export default FoodUpload;

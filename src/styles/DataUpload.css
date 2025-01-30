@@ -1,6 +1,8 @@
 /* General Styles */
 .container {
   text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-top: 5vh;
 }
 
 .container h1,
