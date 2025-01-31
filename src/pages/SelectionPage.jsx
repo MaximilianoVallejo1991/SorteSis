@@ -13,6 +13,7 @@ const SelectionPage = () => {
   const [cards, setCards] = useState([]); // Tarjetas del carousel 1
   const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
   const navigate = useNavigate();
+  const [foodCards, setFoodCards] = useState([]);
 
   const sliderSettings = {
     dots: true, // Muestra indicadores
@@ -52,6 +53,23 @@ const SelectionPage = () => {
     };
 
     fetchCards();
+  }, []);
+
+  useEffect(() => {
+    const fetchFoodCards = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "food_cards"));
+        const foodCardsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setFoodCards(foodCardsData);
+      } catch (error) {
+        console.error("Error al obtener tarjetas de comida:", error);
+      }
+    };
+  
+    fetchFoodCards();
   }, []);
 
   // Maneja el clic en una tarjeta del carrusel 1
@@ -124,43 +142,47 @@ const SelectionPage = () => {
         </button>
       </div>
 
-      {/* Carousel 2 */}
       <div className="div2">
-        <h2>Carousel 2 - Otros Datos</h2>
-        <div className="carousel">
-          {/* Aquí agregarás datos de otras tablas en Firestore */}
-          <p>Datos en construcción...</p>
-        </div>
-        <button className="navigate-button" onClick={() => navigate("/upload")}>
-          Agregar
+        <h2>Comidas</h2>
+        <Slider {...sliderSettings}>
+          {foodCards.map((card) => (
+            <div key={card.id} className="carousel-item">
+              <img src={card.imageUrl} alt={card.name} />
+              <p>{card.name}</p>
+            </div>
+          ))}
+        </Slider>
+        <button className="navigate-button" onClick={() => navigate("/foodUpload")}>
+          Agregar Comida
         </button>
       </div>
 
+
       {/* Detalles de la tarjeta seleccionada */}
-      <div className="div3">
-  <div className="header">
-    <h3>Participantes</h3>
-    <h3>Chances</h3>
-  </div>
-  {selectedCards.length > 0 ? (
-    <ul>
-      {selectedCards.map((card) => (
-        <li className="item" key={card.id}>
-          <span className="participant-name"><strong>{card.name}:</strong></span>
-          <div className="chances-container">
-            <span className="chances-number">{card.chances}</span>
-            <div className="chances-buttons">
-              <button className="chances-button" onClick={() => increaseChances(card.id)}>+</button>
-              <button className="chances-button" onClick={() => decreaseChances(card.id)}>-</button>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p>Haz clic en una tarjeta para agregarla al listado.</p>
-  )}
-</div>
+    <div className="div3">
+      <div className="header">
+        <h3>Participantes</h3>
+        <h3>Chances</h3>
+      </div>
+      {selectedCards.length > 0 ? (
+        <ul>
+          {selectedCards.map((card) => (
+            <li className="item" key={card.id}>
+              <span className="participant-name"><strong>{card.name}:</strong></span>
+              <div className="chances-container">
+                <span className="chances-number">{card.chances}</span>
+                <div className="chances-buttons">
+                  <button className="chances-button" onClick={() => increaseChances(card.id)}>+</button>
+                  <button className="chances-button" onClick={() => decreaseChances(card.id)}>-</button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Haz clic en una tarjeta para agregarla al listado.</p>
+      )}
+    </div>
 
 
       {/* Espacios adicionales */}
