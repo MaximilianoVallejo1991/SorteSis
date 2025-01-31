@@ -15,6 +15,7 @@ const SelectionPage = () => {
   const navigate = useNavigate();
   const [foodCards, setFoodCards] = useState([]);
 
+
   const sliderSettings = {
     dots: true, // Muestra indicadores
     infinite: false, // Cicla a través de los elementos
@@ -158,6 +159,7 @@ const SelectionPage = () => {
           Agregar Comida
         </button>
       </div>
+
 
 
       {/* Detalles de la tarjeta seleccionada */}
