@@ -11,9 +11,10 @@ import "../styles/SelectionPage.css"; // Estilos para esta página
 
 const SelectionPage = () => {
   const [cards, setCards] = useState([]); // Tarjetas del carousel 1
-  const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
-  const navigate = useNavigate();
   const [foodCards, setFoodCards] = useState([]);
+  const [selectedCards, setSelectedCards] = useState([]); // Tarjeta seleccionada
+  const [selectedFoodCards, setSelectedFoodCards] = useState([]);
+  const navigate = useNavigate();
 
 
   const sliderSettings = {
@@ -93,6 +94,26 @@ const SelectionPage = () => {
   };
 
 
+    // Maneja el clic en una tarjeta del carrusel 1
+    const handleFoodCardClick = (foodCard) => {
+      // Agrega la tarjeta al listado seleccionado y elimina del carrusel
+      setSelectedFoodCards((prevSelectedFoodCards) => {
+        const existingFoodCard = prevSelectedFoodCards.find((item) => item.id === foodCard.id);
+        if (existingFoodCard) {
+          // Si la tarjeta ya está en la lista, incrementa el contador de "chances"
+          return prevSelectedFoodCards;
+        } else {
+          // Si la tarjeta no está en la lista, agrégala con un contador de "chances" inicializado en 1
+          return [...prevSelectedFoodCards, { ...foodCard, chances: 1 }];
+        }
+      });
+  
+      // Elimina la tarjeta del carrusel
+      setFoodCards((prevFoodCards) => prevFoodCards.filter((item) => item.id !== foodCard.id));
+    };
+  
+
+
   // Incrementa el contador de "chances"
   const increaseChances = (cardId) => {
     setSelectedCards((prevSelectedCards) =>
@@ -122,11 +143,41 @@ const SelectionPage = () => {
     });
   };
 
+    // Incrementa el contador de "chances"
+    const increaseFood = (foodCardId) => {
+      setSelectedFoodCards((prevSelectedFoodCards) =>
+        prevSelectedFoodCards.map((foodCard) =>
+          foodCard.id === foodCardId ? { ...foodCard, chances: foodCard.chances + 1 } : foodCard
+        )
+      );
+    };
+  
+    // Decrementa el contador de "chances"
+    const decreaseFood = (foodCardId) => {
+      setSelectedFoodCards((prevSelectedFoodCards) => {
+        return prevSelectedFoodCards.reduce((acc, foodCard) => {
+          if (foodCard.id === foodCardId) {
+            if (foodCard.chances > 1) {
+              // Si tiene más de 1 chance, solo se reduce en 1
+              acc.push({ ...foodCard, chances: foodCard.chances - 1 });
+            } else {
+              // Si llega a 0, lo eliminamos de selectedCards y lo volvemos a agregar al carrusel
+              setFoodCards((prevfoodCards) => [...prevfoodCards, foodCard]);
+            }
+          } else {
+            acc.push(foodCard);
+          }
+          return acc;
+        }, []);
+      });
+    };
+
 
   return (
     <div className="parent">
       {/* Carousel 1 */}
       <div className="div1">
+      <h2>Participantes</h2>
 
         <Slider {...sliderSettings}>
           {cards.map((card) => (
@@ -146,16 +197,17 @@ const SelectionPage = () => {
 
         {/* Carousel 2 */}
       <div className="div2">
-        <h2>Comidas</h2>
+        <h2>Premios</h2>
         <Slider {...sliderSettings}>
-          {foodCards.map((card) => (
-            <div key={card.id} className="carousel-item">
-              <img src={card.imageUrl} alt={card.name} />
-              <p>{card.name}</p>
+          {foodCards.map((foodCard) => (
+            <div key={foodCard.id} className="carousel-item"
+            onClick={() => handleFoodCardClick(foodCard)}>
+              <img src={foodCard.imageUrl} alt={foodCard.name} />
+              <p>{foodCard.name}</p>
             </div>
           ))}
         </Slider>
-        <button className="navigate-button" onClick={() => navigate("/food-upload")}>
+        <button className="navigate-button" onClick={() => navigate("/foodUpload")}>
           Agregar Comida
         </button>
       </div>
@@ -190,7 +242,30 @@ const SelectionPage = () => {
 
 
       {/* Espacios adicionales */}
-      <div className="div4">Div 4</div>
+      <div className="div4">
+        <div className="header">
+          <h3>Premios</h3>
+          <h3>Cantidad</h3>
+        </div>
+        {selectedFoodCards.length > 0 ? (
+          <ul>
+            {selectedFoodCards.map((foodCard) => (
+              <li className="item" key={foodCard.id}>
+                <span className="participant-name"><strong>{foodCard.name}:</strong></span>
+                <div className="chances-container">
+                  <span className="chances-number">{foodCard.chances}</span>
+                  <div className="chances-buttons">
+                    <button className="chances-button" onClick={() => increaseFood(foodCard.id)}>+</button>
+                    <button className="chances-button" onClick={() => decreaseFood(foodCard.id)}>-</button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Haz clic en una tarjeta para agregarla al listado.</p>
+        )}
+      </div>
       <div className="div5">Div 5</div>
       <div className="div6">Div 6</div>
     </div>
