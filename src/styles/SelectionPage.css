@@ -36,6 +36,7 @@
     grid-row: span 2 / span 2;
     grid-column-start: 4;
     grid-row-start: 5;
+    overflow-y: scroll;
   }
   
   .div5 {
@@ -51,9 +52,10 @@
   /* Carousel estilos */
   .carousel {
     display: flex;
-    overflow-x: auto;
-    gap: 16px;
+    gap: 8px; /* Asegura espacio entre tarjetas */
+    padding: 8px; /* Evita que las tarjetas queden pegadas a los bordes */
   }
+  
   
   .carousel-item {
     gap: 16px;
@@ -66,6 +68,7 @@
     padding: 8px;
     border-radius: 4px;
     background: #fff;
+    margin-right: 8px;
   }
   
   .carousel-item img {
@@ -170,4 +173,9 @@
 
 .chances-button:hover {
   background-color: #0056b3;
+}
+
+
+.carousel-item {
+  margin-right: 8px; /* Espaciado entre tarjetas */
 }

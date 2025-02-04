@@ -4,13 +4,13 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   margin-top: 5vh;
   padding: 20px;
-
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
   gap: 20px;
   justify-content: center;
 }
+
 /* General Styles */
 
 .parent1 h1,
@@ -76,17 +76,21 @@
 
 /* Ajuste para centrar las columnas */
 .col1 {
-  grid-column: 1 / span 2; /* Se inicia en la columna 3 y ocupa 2 columnas */
-  grid-row: 1; /* Se ubica en la primera fila */
+  grid-column: 1 / span 2;
+  /* Se inicia en la columna 3 y ocupa 2 columnas */
+  grid-row: 1;
+  /* Se ubica en la primera fila */
 }
 
 .col2 {
-  grid-column: 3 / span 4; /* Se inicia en la columna 5 y ocupa 2 columnas */
+  grid-column: 3 / span 4;
+  /* Se inicia en la columna 5 y ocupa 2 columnas */
   grid-row: 1;
 }
 
 /* Ajuste general de las columnas */
-.col1, .col2 {
+.col1,
+.col2 {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 10px;
@@ -105,26 +109,26 @@
   transition: background-color 0.3s;
 }
 
-.carousel-item {
-  gap: 16px;
-  flex: 0 0 auto;
-  width: 120px;
-  height: 140px;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  padding: 8px;
-  border-radius: 4px;
-  background: #fff;
-}
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 768px) {
   .parent1 {
-    grid-template-columns: 1fr; /* Cambia a una sola columna en móviles */
+    grid-template-columns: 1fr;
+    /* Cambia a una sola columna en móviles */
   }
 
-  .col1, .col2 {
-    grid-column: 1 / span 1; /* Ambas ocupan todo el ancho */
+  .col1,
+  .col2 {
+    grid-column: 1 / span 1;
+    /* Ambas ocupan todo el ancho */
   }
+}
+
+
+.container1 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  /* Espaciado entre tarjetas */
+  justify-content: center;
 }

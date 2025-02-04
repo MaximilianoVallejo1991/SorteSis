@@ -20,7 +20,7 @@ const SelectionPage = () => {
   const sliderSettings = {
     dots: true, // Muestra indicadores
     infinite: false, // Cicla a través de los elementos
-    speed: 500,
+    
     slidesToShow: 6, // Cantidad de tarjetas visibles
     slidesToScroll: 1,
     swipe: true, // Habilita el swipe
@@ -195,9 +195,10 @@ const SelectionPage = () => {
         </button>
       </div>
 
-        {/* Carousel 2 */}
+      {/* Carousel 2 */}
       <div className="div2">
         <h2>Premios</h2>
+
         <Slider {...sliderSettings}>
           {foodCards.map((foodCard) => (
             <div key={foodCard.id} className="carousel-item"
@@ -207,6 +208,7 @@ const SelectionPage = () => {
             </div>
           ))}
         </Slider>
+
         <button className="navigate-button" onClick={() => navigate("/foodUpload")}>
           Agregar Comida
         </button>

@@ -23,6 +23,7 @@ function DataUpload() {
     dots: true, // Muestra indicadores
     infinite: true, // Cicla a través de los elementos
     speed: 500,
+
     slidesToShow: 6, // Cantidad de tarjetas visibles
     slidesToScroll: 1,
     swipe: true, // Habilita el swipe
@@ -109,21 +110,21 @@ function DataUpload() {
       <h2>Participantes</h2>
 
 
-
-
-        <Slider {...sliderSettings}>
-        {cards.map((card) => (
+        <div className="container1"> 
+            {cards.map((card) => (
             <Card key={card.id} className="carousel-item" name={card.name} phrase={card.phrase} image={card.imageUrl} />
-          ))}
-        </Slider>
+        )) }
+        </div>
+
+
 
         <button className="navigate-button" onClick={() => navigate("/upload")}>
           Agregar
         </button>
+
       </div>
 
     </div>
-
 
   );
 }
