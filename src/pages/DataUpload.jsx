@@ -107,13 +107,21 @@ function DataUpload() {
       </div>
 
       <div className="col2">
-      <h2>Participantes</h2>
+        <h2>Participantes</h2>
 
 
-        <div className="container1"> 
-            {cards.map((card) => (
-            <Card key={card.id} className="carousel-item" name={card.name} phrase={card.phrase} image={card.imageUrl} />
-        )) }
+        <div className="container1">
+          {cards.map((card) => (
+            <Card
+              key={card.id}
+              id={card.id} // Pasamos la ID del documento
+              name={card.name}
+              phrase={card.phrase}
+              image={card.imageUrl}
+              onDelete={() => handleDelete(card.id, card.imageUrl)}
+              onEdit={() => handleEdit(card)}
+            />
+          ))}
         </div>
 
 

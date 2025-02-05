@@ -7,6 +7,8 @@ function Card({ name, phrase, image }) {
       <img src={image} alt={name} />
       <h3>{name}</h3>
       <p>{phrase}</p>
+      <button onClick={() => navigate(`/edit/${id}`)}>✏️ Editar</button>
+      <button onClick={onDelete} style={{ backgroundColor: "red", color: "white" }}>🗑️ Eliminar</button>
     </div>
   );
 }
