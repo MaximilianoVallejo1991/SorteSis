@@ -6,9 +6,8 @@ import { uploadCard } from "../utils/firebaseUtils";
 import Card from "../components/Card";
 import "../styles/CardsPage.css";
 import "../styles/DataUpload.css";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
+import { deleteCard } from "../utils/firebaseUtils"; // Asegúrate de importar la función correcta
 
 
 function DataUpload() {
@@ -43,6 +42,20 @@ function DataUpload() {
     ],
   };
 
+
+  const handleDelete = async (id, imageUrl) => {
+    const confirmDelete = window.confirm("¿Seguro que quieres eliminar esta tarjeta?");
+    if (!confirmDelete) return;
+  
+    try {
+      await deleteCard(id, imageUrl, "cards");
+      setCards(cards.filter((card) => card.id !== id)); // Actualizar el estado
+      alert("Tarjeta eliminada correctamente.");
+    } catch (error) {
+      console.error("Error al eliminar tarjeta:", error);
+    }
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,7 +131,7 @@ function DataUpload() {
               name={card.name}
               phrase={card.phrase}
               image={card.imageUrl}
-              onDelete={() => handleDelete(card.id, card.imageUrl)}
+              onDelete={() => handleDelete(card.id, card.imageUrl)} 
               onEdit={() => handleEdit(card)}
             />
           ))}

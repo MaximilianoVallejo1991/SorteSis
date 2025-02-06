@@ -1,18 +1,6 @@
 import axios from "axios";
 import { db } from "../firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
-
-import { doc, deleteDoc } from "firebase/firestore";
-
-import { doc, updateDoc } from "firebase/firestore";
-
-
-// Función para extraer el ID público de la imagen en Cloudinary desde la URL
-const getPublicIdFromUrl = (imageUrl) => {
-  const parts = imageUrl.split("/");
-  const filename = parts[parts.length - 1]; // Obtiene el último segmento (nombre del archivo)
-  return filename.split(".")[0]; // Elimina la extensión del archivo
-};
+import { doc, getDoc, updateDoc, deleteDoc, collection, addDoc } from "firebase/firestore";
 
 
 export const uploadCard = async ({ name, phrase, imageFile }) => {
@@ -77,29 +65,37 @@ export const uploadFoodCard = async ({ name, imageFile }) => {
 
 export const deleteCard = async (id, imageUrl, collectionName) => {
   try {
-    // 1. Obtener el ID de la imagen en Cloudinary
-    const publicId = getPublicIdFromUrl(imageUrl);
+    // 🔹 Extraer el ID de la imagen desde la URL de Cloudinary
+    const segments = imageUrl.split("/");
+    const imageName = segments.pop().split(".")[0]; // Extrae el ID de la imagen sin la extensión
+    const cloudinaryPublicId = `cards/${imageName}`; // Ajusta "cards" si usas otra carpeta
 
-    // 2. Eliminar la imagen de Cloudinary
-    await axios.post(
-      `https://api.cloudinary.com/v1_1/dc3kybsmr/delete_by_token`,
+    // 🔹 Eliminar la imagen de Cloudinary
+    const cloudinaryResponse = await axios.post(
+      `https://api.cloudinary.com/v1_1/dc3kybsmr/delete_by_token`, // <- Puede que necesites una API más específica
       {
-        public_id: `cards/${publicId}`,
-        api_key: "TU_API_KEY", // Asegúrate de usar tu API Key
+        public_id: cloudinaryPublicId,
+        api_key: "884664781914291",
+        api_secret: "OSoMXVNW0u9-2sdilFrNvm-oeAs",
       }
     );
 
-    // 3. Eliminar el documento en Firestore
+    console.log("Respuesta de Cloudinary:", cloudinaryResponse.data);
+
+    // 🔹 Verificar si la imagen fue eliminada
+    if (cloudinaryResponse.data.result !== "ok") {
+      console.warn("La imagen no pudo ser eliminada en Cloudinary.");
+    }
+
+    // 🔹 Eliminar el documento en Firestore
     await deleteDoc(doc(db, collectionName, id));
 
-    console.log("Tarjeta eliminada correctamente.");
+    console.log(`Tarjeta con ID ${id} eliminada exitosamente.`);
   } catch (error) {
     console.error("Error al eliminar la tarjeta:", error);
     throw error;
   }
 };
-
-
 
 export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, collectionName }) => {
   try {
@@ -125,7 +121,7 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
         `https://api.cloudinary.com/v1_1/dc3kybsmr/delete_by_token`,
         {
           public_id: `${collectionName}/${publicId}`,
-          api_key: "TU_API_KEY",
+          api_key: "884664781914291",
         }
       );
     }

@@ -1,7 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Card.css"; // Importa el estilo desde la carpeta styles
 
-function Card({ name, phrase, image }) {
+function Card({ name, phrase, image, onDelete }) {
   return (
     <div className="card">
       <img src={image} alt={name} />
