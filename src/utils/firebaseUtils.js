@@ -5,6 +5,9 @@ import { doc, getDoc, updateDoc, deleteDoc, collection, addDoc } from "firebase/
 
 export const uploadCard = async ({ name, phrase, imageFile }) => {
   try {
+
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
+
     // Crear el FormData para subir la imagen
     const formData = new FormData();
     formData.append("file", imageFile); // El archivo de imagen
@@ -62,29 +65,19 @@ export const uploadFoodCard = async ({ name, imageFile }) => {
 };
 
 
-
 export const deleteCard = async (id, imageUrl, collectionName) => {
   try {
-    // 🔹 Extraer el ID de la imagen desde la URL de Cloudinary
     const segments = imageUrl.split("/");
-    const imageName = segments.pop().split(".")[0]; // Extrae el ID de la imagen sin la extensión
-    const cloudinaryPublicId = `cards/${imageName}`; // Ajusta "cards" si usas otra carpeta
+    const imageName = segments.pop().split(".")[0]; // Extrae el ID de la imagen
+    const cloudinaryPublicId = `${collectionName}/${imageName}`;
 
-    // 🔹 Eliminar la imagen de Cloudinary
-    const cloudinaryResponse = await axios.post(
-      `https://api.cloudinary.com/v1_1/dc3kybsmr/delete_by_token`, // <- Puede que necesites una API más específica
-      {
-        public_id: cloudinaryPublicId,
-        api_key: "884664781914291",
-        api_secret: "OSoMXVNW0u9-2sdilFrNvm-oeAs",
-      }
-    );
+    // 🔹 Llamar al backend para eliminar la imagen
+    const cloudinaryResponse = await axios.delete(`${backendURL}/delete-image`, {
+      data: { public_id: cloudinaryPublicId },
+    });
 
-    console.log("Respuesta de Cloudinary:", cloudinaryResponse.data);
-
-    // 🔹 Verificar si la imagen fue eliminada
-    if (cloudinaryResponse.data.result !== "ok") {
-      console.warn("La imagen no pudo ser eliminada en Cloudinary.");
+    if (!cloudinaryResponse.data.success) {
+      console.warn("No se pudo eliminar la imagen de Cloudinary.");
     }
 
     // 🔹 Eliminar el documento en Firestore
@@ -96,6 +89,7 @@ export const deleteCard = async (id, imageUrl, collectionName) => {
     throw error;
   }
 };
+
 
 export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, collectionName }) => {
   try {
