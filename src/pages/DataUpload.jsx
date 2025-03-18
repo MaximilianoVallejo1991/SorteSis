@@ -44,6 +44,10 @@ function DataUpload() {
 
 
   const handleDelete = async (id, imageUrl) => {
+    
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+
     const confirmDelete = window.confirm("¿Seguro que quieres eliminar esta tarjeta?");
     if (!confirmDelete) return;
   

@@ -67,6 +67,10 @@ export const uploadFoodCard = async ({ name, imageFile }) => {
 
 export const deleteCard = async (id, imageUrl, collectionName) => {
   try {
+
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
+    
+
     const segments = imageUrl.split("/");
     const imageName = segments.pop().split(".")[0]; // Extrae el ID de la imagen
     const cloudinaryPublicId = `${collectionName}/${imageName}`;
