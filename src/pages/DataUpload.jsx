@@ -65,6 +65,10 @@ function DataUpload() {
     e.preventDefault();
     try {
       const newCard = await uploadCard({ name, phrase, imageFile: image });
+  
+      // Agregar la nueva tarjeta al estado
+      setCards((prevCards) => [...prevCards, newCard]);
+  
       console.log("Tarjeta creada:", newCard);
       setName("");
       setPhrase("");
@@ -74,6 +78,7 @@ function DataUpload() {
       console.error("Error al crear tarjeta:", error);
     }
   };
+  
 
 
   useEffect(() => {
@@ -98,7 +103,7 @@ function DataUpload() {
     <div className="parent1">
 
       <div className="col1">
-        <h1 className="title">Cargar Tarjeta</h1>
+        <h1 className="title">Cargar Participante</h1>
         <form onSubmit={handleSubmit} className="data-upload">
           <input
             type="text"
@@ -120,17 +125,20 @@ function DataUpload() {
             required
           />
           <button type="submit">Guardar</button>
+          <button onClick={()=> navigate ("/selection")}>Regresar</button>
+
+
         </form>
       </div>
 
       <div className="col2">
-        <h2>Participantes</h2>
+        <h1>Participantes</h1>
 
 
         <div className="container1">
           {cards.map((card) => (
             <Card
-              key={card.id}
+
               id={card.id} // Pasamos la ID del documento
               name={card.name}
               phrase={card.phrase}
