@@ -135,8 +135,7 @@ function DataUpload() {
               name={card.name}
               phrase={card.phrase}
               image={card.imageUrl}
-              onDelete={() => handleDelete(card.id, card.imageUrl)} 
-              onEdit={() => handleEdit(card)}
+
             />
           ))}
         </div>
