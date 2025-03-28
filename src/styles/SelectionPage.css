@@ -14,9 +14,10 @@
   }
   
   .div1, .div2 {
-  grid-column: span 5 / span 5;
+    grid-column: span 5 / span 5;
     grid-row: span 2 / span 2;
     grid-column-start: 2;
+    margin-top: 6px;
   }
   
   .div2 {
@@ -53,6 +54,7 @@
   
   /* Carousel estilos */
   .carousel {
+    
     display: flex;
     gap: 8px; /* Asegura espacio entre tarjetas */
     padding: 8px; /* Evita que las tarjetas queden pegadas a los bordes */
@@ -60,6 +62,7 @@
   
   
   .carousel-item {
+    margin-top: 20px;
     gap: 16px;
     flex: 0 0 auto;
     width: 120px;

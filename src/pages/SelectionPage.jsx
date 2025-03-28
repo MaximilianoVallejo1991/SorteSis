@@ -163,7 +163,7 @@ const SelectionPage = () => {
   return (
     <div className="parent">
       <div className="div1">
-        <h2>Participantes</h2>
+
         <Slider {...sliderSettings}>
           {cards.map(card => (
             <div key={card.id} className="carousel-item" onClick={() => handleCardClick(card)}>
@@ -176,7 +176,7 @@ const SelectionPage = () => {
       </div>
 
       <div className="div2">
-        <h2>Premios</h2>
+
         <Slider {...sliderSettings}>
           {foodCards.map(foodCard => (
             <div key={foodCard.id} className="carousel-item" onClick={() => handleFoodCardClick(foodCard)}>
