@@ -42,6 +42,8 @@
   .div5 {
     grid-column-start: 6;
     grid-row-start: 5;
+    overflow-y: scroll;
+
   }
   
   .div6 {

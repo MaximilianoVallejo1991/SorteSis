@@ -94,19 +94,36 @@ const SelectionPage = () => {
       alert("Debes seleccionar al menos un participante y un premio.");
       return;
     }
-
+  
+    // Crear lista ponderada de participantes
     let weightedList = selectedCards.flatMap(card => Array(card.chances).fill(card.name));
-    if (weightedList.length < selectedFoodCards.length) {
-      alert("No hay suficientes participaciones para los premios.");
+  
+    if (weightedList.length === 0) {
+      alert("No hay suficientes participaciones para sortear.");
       return;
     }
-
-    let shuffled = weightedList.sort(() => 0.5 - Math.random());
-    let uniqueWinners = [...new Set(shuffled)].slice(0, selectedFoodCards.length);
-
-    setWinners(uniqueWinners);
+  
+    // Mezclar la lista de participantes
+    let shuffledParticipants = weightedList.sort(() => 0.5 - Math.random());
+  
+    // Eliminar duplicados para tener una lista de ganadores únicos
+    let uniqueWinners = [...new Set(shuffledParticipants)];
+  
+    // Crear lista de premios según cantidades
+    let prizeList = selectedFoodCards.flatMap(foodCard => Array(foodCard.chances).fill(foodCard.name));
+  
+    let assignedWinners = [];
+  
+    // Asignar premios en orden a los ganadores seleccionados
+    for (let i = 0; i < prizeList.length; i++) {
+      if (i >= uniqueWinners.length) break; // Si hay más premios que ganadores, detener la asignación
+  
+      assignedWinners.push({ name: uniqueWinners[i], prize: prizeList[i] });
+    }
+  
+    setWinners(assignedWinners);
   };
-
+  
   const resetSelection = () => {
     setSelectedCards([]);
     setSelectedFoodCards([]);
@@ -136,6 +153,11 @@ const SelectionPage = () => {
     fetchCards();
     fetchFoodCards();
   };
+
+  const clearWinners = () => {
+    setWinners([]); // Limpiar solo la lista de ganadores
+  };
+  
   
 
   return (
@@ -213,20 +235,26 @@ const SelectionPage = () => {
       </div>
 
       <div className="div5">
-        <h3>Ganadores</h3>
-        {winners.length > 0 ? (
-          <ul>
-            {winners.map((winner, index) => (
-              <li key={index}>{winner}</li>
-            ))}
-          </ul>
-        ) : <p>No se ha realizado el sorteo.</p>}
-      </div>
+  <h3>Ganadores</h3>
+  {winners.length > 0 ? (
+    <ul>
+      {winners.map((winner, index) => (
+        <li key={index}>
+          {winner.name} - {winner.prize}
+        </li>
+      ))}
+    </ul>
+  ) : <p>No se ha realizado el sorteo.</p>}
+</div>
+
 
       <div className="div6">
         <button className="raffle-button" onClick={handleRaffle}>Realizar Sorteo</button>
 
         <button className="reset-button" onClick={resetSelection}>Reiniciar</button>
+
+        <button className="clear-winners-button" onClick={clearWinners}>Limpiar Sorteo</button>
+
 
       </div>
     </div>
