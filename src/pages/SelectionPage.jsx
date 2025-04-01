@@ -109,16 +109,15 @@ const SelectionPage = () => {
       let winner = loosers[randomIndex];
       let prize = prizePool.shift();
       
-      if (!assignedPrizes[winner]) {
-        assignedPrizes[winner] = [];
+      if (!assignedWinners[winner]) {
+        assignedWinners[winner] = {};
       }
-      assignedPrizes[winner].push(prize);
-      
-      loosers = loosers.filter(name => name !== winner);
+      assignedWinners[winner][prize] = (assignedWinners[winner][prize] || 0) + 1;
+
+      loosers = loosers.filter((name, index) => index !== randomIndex);
     }
 
-    assignedWinners = Object.entries(assignedPrizes).map(([name, prizes]) => ({ name, prizes }));
-    setWinners(assignedWinners);
+    setWinners(Object.entries(assignedWinners).map(([name, prizes]) => ({ name, prizes })));
   };
 
 
@@ -233,12 +232,17 @@ const SelectionPage = () => {
         ) : <p>Haz clic en una tarjeta para agregarla.</p>}
       </div>
       <div className="div5">
-        <h3>Ganadores</h3>
+        <h3>GANADORES</h3>
         {winners.length > 0 ? (
           <ul>
             {winners.map((winner, index) => (
               <li key={index}>
-                <strong>{winner.name}:</strong> {winner.prizes.join(", ")}
+                <strong>{winner.name}:</strong>
+                {Object.entries(winner.prizes).map(([prize, quantity], i) => (
+                  <span key={prize}>
+                    {i > 0 && "; "} {prize} x {quantity}
+                  </span>
+                ))}
               </li>
             ))}
           </ul>
