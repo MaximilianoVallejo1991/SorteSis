@@ -15,6 +15,31 @@ const SelectionPage = () => {
   const [winners, setWinners] = useState([]); // Estado para mostrar ganadores
   const navigate = useNavigate();
 
+  const fetchFoodCards = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "food_cards"));
+      const sortedFoodCards =querySnapshot.docs
+      .map(doc => ({ id:doc.id, ...doc.data()}))
+      .sort((a,b) => a.name.localeCompare(b.name,  undefined, { numeric: true}));
+      setFoodCards(sortedFoodCards)
+      
+    } catch (error) {
+      console.error("Error al obtener tarjetas de comida:", error);
+    }
+  };
+  
+  const fetchCards = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "cards"));
+      const sortedCards = querySnapshot.docs
+      .map(doc => ({ id:doc.id, ...doc.data()}))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true}));
+      setCards(sortedCards);
+    } catch (error) {
+      console.error("Error al obtener tarjetas:", error);
+    }
+  };
+
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -26,45 +51,29 @@ const SelectionPage = () => {
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
-
+  
   useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "cards"));
-        setCards(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Error al obtener tarjetas:", error);
-      }
-    };
     fetchCards();
   }, []);
 
   useEffect(() => {
-    const fetchFoodCards = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "food_cards"));
-        setFoodCards(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Error al obtener tarjetas de comida:", error);
-      }
-    };
     fetchFoodCards();
   }, []);
-
+  
   const handleCardClick = (card) => {
     setSelectedCards(prev => prev.some(c => c.id === card.id) ? prev : [...prev, { ...card, chances: 1 }]);
     setCards(prev => prev.filter(c => c.id !== card.id));
   };
-
+  
   const handleFoodCardClick = (foodCard) => {
     setSelectedFoodCards(prev => prev.some(f => f.id === foodCard.id) ? prev : [...prev, { ...foodCard, chances: 1 }]);
     setFoodCards(prev => prev.filter(f => f.id !== foodCard.id));
   };
-
+  
   const increaseChances = (cardId) => {
     setSelectedCards(prev => prev.map(card => card.id === cardId ? { ...card, chances: card.chances + 1 } : card));
   };
-
+  
   const decreaseChances = (cardId) => {
     setSelectedCards(prev => prev.reduce((acc, card) => {
       if (card.id === cardId) {
@@ -74,11 +83,11 @@ const SelectionPage = () => {
       return acc;
     }, []));
   };
-
+  
   const increaseFood = (foodCardId) => {
     setSelectedFoodCards(prev => prev.map(foodCard => foodCard.id === foodCardId ? { ...foodCard, chances: foodCard.chances + 1 } : foodCard));
   };
-
+  
   const decreaseFood = (foodCardId) => {
     setSelectedFoodCards(prev => prev.reduce((acc, foodCard) => {
       if (foodCard.id === foodCardId) {
@@ -88,23 +97,23 @@ const SelectionPage = () => {
       return acc;
     }, []));
   };
-
+  
   const handleRaffle = () => {
     if (selectedCards.length === 0 || selectedFoodCards.length === 0) {
       alert("Debes seleccionar al menos un participante y un premio.");
       return;
     }
-
+    
     let loosers = selectedCards.flatMap(card => Array(card.chances).fill(card.name));
     let prizePool = selectedFoodCards.flatMap(foodCard => Array(foodCard.chances).fill(foodCard.name));
     let assignedWinners = [];
-    let assignedPrizes = {};
 
+    
     while (prizePool.length > 0) {
       if (loosers.length === 0) {
         loosers = selectedCards.flatMap(card => Array(card.chances).fill(card.name));
       }
-
+      
       let randomIndex = Math.floor(Math.random() * loosers.length);
       let winner = loosers[randomIndex];
       let prize = prizePool.shift();
@@ -114,7 +123,8 @@ const SelectionPage = () => {
       }
       assignedWinners[winner][prize] = (assignedWinners[winner][prize] || 0) + 1;
 
-      loosers = loosers.filter((name, index) => index !== randomIndex);
+      loosers.splice(randomIndex, 1);
+
     }
 
     setWinners(Object.entries(assignedWinners).map(([name, prizes]) => ({ name, prizes })));
@@ -130,24 +140,7 @@ const SelectionPage = () => {
     setFoodCards([]);
   
     // Volver a cargar las tarjetas desde Firestore
-    const fetchCards = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "cards"));
-        setCards(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Error al obtener tarjetas:", error);
-      }
-    };
-  
-    const fetchFoodCards = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "food_cards"));
-        setFoodCards(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      } catch (error) {
-        console.error("Error al obtener tarjetas de comida:", error);
-      }
-    };
-  
+
     fetchCards();
     fetchFoodCards();
   };
