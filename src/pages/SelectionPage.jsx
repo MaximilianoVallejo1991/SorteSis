@@ -250,12 +250,14 @@ const SelectionPage = () => {
       </div>
 
       <div className="div6">
-        <button className="raffle-button" onClick={handleRaffle}>Realizar Sorteo</button>
+        <div className="container-button">
 
-        <button className="reset-button" onClick={resetSelection}>Reiniciar</button>
+          <button className="raffle-button" onClick={handleRaffle}>Realizar Sorteo</button>
 
-        <button className="clear-winners-button" onClick={clearWinners}>Limpiar Sorteo</button>
+          <button className="clear-winners-button" onClick={clearWinners}>Limpiar Sorteo</button>
 
+          <button className="reset-button" onClick={resetSelection}>Reiniciar</button>
+        </div>
 
       </div>
     </div>
