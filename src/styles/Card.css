@@ -6,6 +6,7 @@
     text-align: center;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
   }
   
   .card img {
@@ -16,12 +17,19 @@
   }
   
   .card h3 {
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
+    font-size: 1rem; 
+    margin: 0.3rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
   .card p {
-    font-size: 1rem;
+    font-size: 0.85rem; 
     color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+  
   

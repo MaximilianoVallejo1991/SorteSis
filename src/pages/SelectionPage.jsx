@@ -40,18 +40,6 @@ const SelectionPage = () => {
     }
   };
 
-  const sliderSettings = {
-    dots: true,
-    infinite: false,
-    slidesToShow: 6,
-    slidesToScroll: 1,
-    swipe: true,
-    responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
-    ],
-  };
-  
   useEffect(() => {
     fetchCards();
   }, []);
@@ -124,13 +112,13 @@ const SelectionPage = () => {
       assignedWinners[winner][prize] = (assignedWinners[winner][prize] || 0) + 1;
 
       loosers.splice(randomIndex, 1);
-
+      
     }
-
+    
     setWinners(Object.entries(assignedWinners).map(([name, prizes]) => ({ name, prizes })));
   };
-
-
+  
+  
   
   const resetSelection = () => {
     setSelectedCards([]);
@@ -138,19 +126,32 @@ const SelectionPage = () => {
     setWinners([]);
     setCards([]); 
     setFoodCards([]);
-  
+    
     // Volver a cargar las tarjetas desde Firestore
-
+    
     fetchCards();
     fetchFoodCards();
   };
-
+  
   const clearWinners = () => {
     setWinners([]); // Limpiar solo la lista de ganadores
   };
   
+  const sliderSettings = {
+    dots: false,
+    infinite: cards.length > 3,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    swipe: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
+    ],
+  };
   
-
+  
   return (
     <div className="parent">
       <div className="div1">

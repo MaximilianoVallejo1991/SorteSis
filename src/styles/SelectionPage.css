@@ -1,5 +1,5 @@
 .parent {
-    margin-top: 2vh;
+    margin-top: 1.2vh;
     display: grid;
     height: 96vh;
     grid-template-columns: repeat(7, 1fr);
@@ -17,7 +17,7 @@
     grid-column: span 5 / span 5;
     grid-row: span 2 / span 2;
     grid-column-start: 2;
-    margin-top: 6px;
+
   }
   
   .div2 {
@@ -68,20 +68,50 @@
     padding: 8px; /* Evita que las tarjetas queden pegadas a los bordes */
   }
   
-  
+
   .carousel-item {
     margin-top: 20px;
-    gap: 16px;
-    flex: 0 0 auto;
-    width: 120px;
+    width: 100%; /* Ocupa bien su slide */
+    max-width: 150px; /* Opcional, para no excederse */
     height: 16vh;
     text-align: center;
     cursor: pointer;
     border: 1px solid #ccc;
     padding: 8px;
     border-radius: 4px;
-    background: #fff;
-    margin-right: 8px;
+    background: #336aa0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+  }
+
+  .carousel-item p {
+    font-size: 1rem; /* 🔽 Tamaño más chico */
+    color: white;
+    margin-top:12px;
+  
+    /* 🔽 Evita que el texto se desborde */
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  
+
+  .slick-track {
+    display: flex !important;
+  }
+  
+  /* Evita que las slides se estiren o apilen */
+  .slick-slide {
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    margin-right: 22px;
   }
   
   .carousel-item img {
@@ -89,6 +119,8 @@
     height: 50%;
     object-fit: cover;
     border-radius: 4px;
+    position: relative;
+    justify-content: center;
   }
   
   .carousel-item:hover {
@@ -189,6 +221,4 @@
 }
 
 
-.carousel-item {
-  margin-right: 8px; /* Espaciado entre tarjetas */
-}
+
