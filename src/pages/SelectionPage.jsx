@@ -40,6 +40,37 @@ const SelectionPage = () => {
     }
   };
 
+
+  const sliderSettingsCards = {
+    dots: false,
+    infinite: cards.length > 5,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    swipe: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
+    ],
+  };
+
+
+  const sliderSettingsFood = {
+    dots: false,
+    infinite: foodCards.length > 5, // O el número de slides deseado
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    swipe: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
+    ],
+  };
+  
+
   useEffect(() => {
     fetchCards();
   }, []);
@@ -112,13 +143,13 @@ const SelectionPage = () => {
       assignedWinners[winner][prize] = (assignedWinners[winner][prize] || 0) + 1;
 
       loosers.splice(randomIndex, 1);
-      
+
     }
-    
+
     setWinners(Object.entries(assignedWinners).map(([name, prizes]) => ({ name, prizes })));
   };
-  
-  
+
+
   
   const resetSelection = () => {
     setSelectedCards([]);
@@ -126,37 +157,25 @@ const SelectionPage = () => {
     setWinners([]);
     setCards([]); 
     setFoodCards([]);
-    
+  
     // Volver a cargar las tarjetas desde Firestore
-    
+
     fetchCards();
     fetchFoodCards();
   };
-  
+
   const clearWinners = () => {
     setWinners([]); // Limpiar solo la lista de ganadores
   };
   
-  const sliderSettings = {
-    dots: false,
-    infinite: cards.length > 3,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    swipe: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
-    ],
-  };
   
-  
+
   return (
     <div className="parent">
+      
       <div className="div1">
 
-        <Slider {...sliderSettings}>
+        <Slider {...sliderSettingsCards}>
           {cards.map(card => (
             <div key={card.id} className="carousel-item" onClick={() => handleCardClick(card)}>
               <img src={card.imageUrl} alt={card.name} />
@@ -164,12 +183,12 @@ const SelectionPage = () => {
             </div>
           ))}
         </Slider>
-        <button className="navigate-button" onClick={() => navigate("/upload")}>Agregar</button>
+        <button className="navigate-button" onClick={() => navigate("/upload")}>Modificar</button>
       </div>
 
       <div className="div2">
 
-        <Slider {...sliderSettings}>
+        <Slider {...sliderSettingsFood}>
           {foodCards.map(foodCard => (
             <div key={foodCard.id} className="carousel-item" onClick={() => handleFoodCardClick(foodCard)}>
               <img src={foodCard.imageUrl} alt={foodCard.name} />
@@ -177,7 +196,7 @@ const SelectionPage = () => {
             </div>
           ))}
         </Slider>
-        <button className="navigate-button" onClick={() => navigate("/foodUpload")}>Agregar Comida</button>
+        <button className="navigate-button" onClick={() => navigate("/foodUpload")}>Modificar</button>
       </div>
 
       <div className="div3">
