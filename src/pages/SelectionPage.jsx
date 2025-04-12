@@ -15,31 +15,36 @@ const SelectionPage = () => {
   const [winners, setWinners] = useState([]); // Estado para mostrar ganadores
   const navigate = useNavigate();
 
+  const [showModal, setShowModal] = useState(false);
+  const [isRaffling, setIsRaffling] = useState(false);
+
   const fetchFoodCards = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "food_cards"));
-      const sortedFoodCards =querySnapshot.docs
-      .map(doc => ({ id:doc.id, ...doc.data()}))
-      .sort((a,b) => a.name.localeCompare(b.name,  undefined, { numeric: true}));
-      setFoodCards(sortedFoodCards)
-      
+      const sortedFoodCards = querySnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { numeric: true })
+        );
+      setFoodCards(sortedFoodCards);
     } catch (error) {
       console.error("Error al obtener tarjetas de comida:", error);
     }
   };
-  
+
   const fetchCards = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "cards"));
       const sortedCards = querySnapshot.docs
-      .map(doc => ({ id:doc.id, ...doc.data()}))
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true}));
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { numeric: true })
+        );
       setCards(sortedCards);
     } catch (error) {
       console.error("Error al obtener tarjetas:", error);
     }
   };
-
 
   const sliderSettingsCards = {
     dots: false,
@@ -55,7 +60,6 @@ const SelectionPage = () => {
     ],
   };
 
-
   const sliderSettingsFood = {
     dots: false,
     infinite: foodCards.length > 5, // O el número de slides deseado
@@ -69,7 +73,6 @@ const SelectionPage = () => {
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
-  
 
   useEffect(() => {
     fetchCards();
@@ -78,86 +81,124 @@ const SelectionPage = () => {
   useEffect(() => {
     fetchFoodCards();
   }, []);
-  
+
   const handleCardClick = (card) => {
-    setSelectedCards(prev => prev.some(c => c.id === card.id) ? prev : [...prev, { ...card, chances: 1 }]);
-    setCards(prev => prev.filter(c => c.id !== card.id));
+    setSelectedCards((prev) =>
+      prev.some((c) => c.id === card.id)
+        ? prev
+        : [...prev, { ...card, chances: 1 }]
+    );
+    setCards((prev) => prev.filter((c) => c.id !== card.id));
   };
-  
+
   const handleFoodCardClick = (foodCard) => {
-    setSelectedFoodCards(prev => prev.some(f => f.id === foodCard.id) ? prev : [...prev, { ...foodCard, chances: 1 }]);
-    setFoodCards(prev => prev.filter(f => f.id !== foodCard.id));
+    setSelectedFoodCards((prev) =>
+      prev.some((f) => f.id === foodCard.id)
+        ? prev
+        : [...prev, { ...foodCard, chances: 1 }]
+    );
+    setFoodCards((prev) => prev.filter((f) => f.id !== foodCard.id));
   };
-  
+
   const increaseChances = (cardId) => {
-    setSelectedCards(prev => prev.map(card => card.id === cardId ? { ...card, chances: card.chances + 1 } : card));
+    setSelectedCards((prev) =>
+      prev.map((card) =>
+        card.id === cardId ? { ...card, chances: card.chances + 1 } : card
+      )
+    );
   };
-  
+
   const decreaseChances = (cardId) => {
-    setSelectedCards(prev => prev.reduce((acc, card) => {
-      if (card.id === cardId) {
-        if (card.chances > 1) acc.push({ ...card, chances: card.chances - 1 });
-        else setCards(prevCards => [...prevCards, card]);
-      } else acc.push(card);
-      return acc;
-    }, []));
+    setSelectedCards((prev) =>
+      prev.reduce((acc, card) => {
+        if (card.id === cardId) {
+          if (card.chances > 1)
+            acc.push({ ...card, chances: card.chances - 1 });
+          else setCards((prevCards) => [...prevCards, card]);
+        } else acc.push(card);
+        return acc;
+      }, [])
+    );
   };
-  
+
   const increaseFood = (foodCardId) => {
-    setSelectedFoodCards(prev => prev.map(foodCard => foodCard.id === foodCardId ? { ...foodCard, chances: foodCard.chances + 1 } : foodCard));
+    setSelectedFoodCards((prev) =>
+      prev.map((foodCard) =>
+        foodCard.id === foodCardId
+          ? { ...foodCard, chances: foodCard.chances + 1 }
+          : foodCard
+      )
+    );
   };
-  
+
   const decreaseFood = (foodCardId) => {
-    setSelectedFoodCards(prev => prev.reduce((acc, foodCard) => {
-      if (foodCard.id === foodCardId) {
-        if (foodCard.chances > 1) acc.push({ ...foodCard, chances: foodCard.chances - 1 });
-        else setFoodCards(prevFoodCards => [...prevFoodCards, foodCard]);
-      } else acc.push(foodCard);
-      return acc;
-    }, []));
+    setSelectedFoodCards((prev) =>
+      prev.reduce((acc, foodCard) => {
+        if (foodCard.id === foodCardId) {
+          if (foodCard.chances > 1)
+            acc.push({ ...foodCard, chances: foodCard.chances - 1 });
+          else setFoodCards((prevFoodCards) => [...prevFoodCards, foodCard]);
+        } else acc.push(foodCard);
+        return acc;
+      }, [])
+    );
   };
-  
+
   const handleRaffle = () => {
     if (selectedCards.length === 0 || selectedFoodCards.length === 0) {
       alert("Debes seleccionar al menos un participante y un premio.");
       return;
     }
-    
-    let loosers = selectedCards.flatMap(card => Array(card.chances).fill(card.name));
-    let prizePool = selectedFoodCards.flatMap(foodCard => Array(foodCard.chances).fill(foodCard.name));
-    let assignedWinners = [];
 
-    
-    while (prizePool.length > 0) {
-      if (loosers.length === 0) {
-        loosers = selectedCards.flatMap(card => Array(card.chances).fill(card.name));
+    setShowModal(true);
+    setIsRaffling(true);
+
+    setTimeout(() => {
+      let loosers = selectedCards.flatMap((card) =>
+        Array(card.chances).fill(card.name)
+      );
+      let prizePool = selectedFoodCards.flatMap((foodCard) =>
+        Array(foodCard.chances).fill(foodCard.name)
+      );
+      let assignedWinners = [];
+
+      while (prizePool.length > 0) {
+        if (loosers.length === 0) {
+          loosers = selectedCards.flatMap((card) =>
+            Array(card.chances).fill(card.name)
+          );
+        }
+
+        let randomIndex = Math.floor(Math.random() * loosers.length);
+        let winner = loosers[randomIndex];
+        let prize = prizePool.shift();
+
+        if (!assignedWinners[winner]) {
+          assignedWinners[winner] = {};
+        }
+        assignedWinners[winner][prize] =
+          (assignedWinners[winner][prize] || 0) + 1;
+
+        loosers.splice(randomIndex, 1);
       }
-      
-      let randomIndex = Math.floor(Math.random() * loosers.length);
-      let winner = loosers[randomIndex];
-      let prize = prizePool.shift();
-      
-      if (!assignedWinners[winner]) {
-        assignedWinners[winner] = {};
-      }
-      assignedWinners[winner][prize] = (assignedWinners[winner][prize] || 0) + 1;
 
-      loosers.splice(randomIndex, 1);
-
-    }
-
-    setWinners(Object.entries(assignedWinners).map(([name, prizes]) => ({ name, prizes })));
+      setWinners(
+        Object.entries(assignedWinners).map(([name, prizes]) => ({
+          name,
+          prizes,
+        }))
+      );
+      setIsRaffling(false);
+    }, 3000); // 3 segundos de animación
   };
 
-
-  
   const resetSelection = () => {
     setSelectedCards([]);
     setSelectedFoodCards([]);
     setWinners([]);
-    setCards([]); 
+    setCards([]);
     setFoodCards([]);
-  
+
     // Volver a cargar las tarjetas desde Firestore
 
     fetchCards();
@@ -167,36 +208,46 @@ const SelectionPage = () => {
   const clearWinners = () => {
     setWinners([]); // Limpiar solo la lista de ganadores
   };
-  
-  
 
   return (
     <div className="parent">
-      
       <div className="div1">
-
         <Slider {...sliderSettingsCards}>
-          {cards.map(card => (
-            <div key={card.id} className="carousel-item" onClick={() => handleCardClick(card)}>
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="carousel-item"
+              onClick={() => handleCardClick(card)}
+            >
               <img src={card.imageUrl} alt={card.name} />
               <p>{card.name}</p>
             </div>
           ))}
         </Slider>
-        <button className="navigate-button" onClick={() => navigate("/upload")}>Modificar</button>
+        <button className="navigate-button" onClick={() => navigate("/upload")}>
+          Modificar
+        </button>
       </div>
 
       <div className="div2">
-
         <Slider {...sliderSettingsFood}>
-          {foodCards.map(foodCard => (
-            <div key={foodCard.id} className="carousel-item" onClick={() => handleFoodCardClick(foodCard)}>
+          {foodCards.map((foodCard) => (
+            <div
+              key={foodCard.id}
+              className="carousel-item"
+              onClick={() => handleFoodCardClick(foodCard)}
+            >
               <img src={foodCard.imageUrl} alt={foodCard.name} />
               <p>{foodCard.name}</p>
             </div>
           ))}
         </Slider>
-        <button className="navigate-button" onClick={() => navigate("/foodUpload")}>Modificar</button>
+        <button
+          className="navigate-button"
+          onClick={() => navigate("/foodUpload")}
+        >
+          Modificar
+        </button>
       </div>
 
       <div className="div3">
@@ -206,9 +257,11 @@ const SelectionPage = () => {
         </div>
         {selectedCards.length > 0 ? (
           <ul>
-            {selectedCards.map(card => (
+            {selectedCards.map((card) => (
               <li className="item" key={card.id}>
-                <span><strong>{card.name}:</strong></span>
+                <span>
+                  <strong>{card.name}:</strong>
+                </span>
                 <div className="chances-container">
                   <span>{card.chances}</span>
                   <div>
@@ -219,7 +272,9 @@ const SelectionPage = () => {
               </li>
             ))}
           </ul>
-        ) : <p>Haz clic en una tarjeta para agregarla.</p>}
+        ) : (
+          <p>Haz clic en una tarjeta para agregarla.</p>
+        )}
       </div>
 
       <div className="div4">
@@ -229,9 +284,11 @@ const SelectionPage = () => {
         </div>
         {selectedFoodCards.length > 0 ? (
           <ul>
-            {selectedFoodCards.map(foodCard => (
+            {selectedFoodCards.map((foodCard) => (
               <li className="item" key={foodCard.id}>
-                <span><strong>{foodCard.name}:</strong></span>
+                <span>
+                  <strong>{foodCard.name}:</strong>
+                </span>
                 <div className="chances-container">
                   <span>{foodCard.chances}</span>
                   <div>
@@ -242,7 +299,9 @@ const SelectionPage = () => {
               </li>
             ))}
           </ul>
-        ) : <p>Haz clic en una tarjeta para agregarla.</p>}
+        ) : (
+          <p>Haz clic en una tarjeta para agregarla.</p>
+        )}
       </div>
       <div className="div5">
         <h3>GANADORES</h3>
@@ -259,20 +318,59 @@ const SelectionPage = () => {
               </li>
             ))}
           </ul>
-        ) : <p>No se ha realizado el sorteo.</p>}
+        ) : (
+          <p>No se ha realizado el sorteo.</p>
+        )}
       </div>
 
       <div className="div6">
         <div className="container-button">
+          <button className="raffle-button" onClick={handleRaffle}>
+            Realizar Sorteo
+          </button>
 
-          <button className="raffle-button" onClick={handleRaffle}>Realizar Sorteo</button>
+          <button className="clear-winners-button" onClick={clearWinners}>
+            Limpiar Sorteo
+          </button>
 
-          <button className="clear-winners-button" onClick={clearWinners}>Limpiar Sorteo</button>
-
-          <button className="reset-button" onClick={resetSelection}>Reiniciar</button>
+          <button className="reset-button" onClick={resetSelection}>
+            Reiniciar
+          </button>
         </div>
-
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            {isRaffling ? (
+              <div className="raffle-animation">
+                <p>Sorteando...</p>
+                <div className="spinner"></div>
+              </div>
+            ) : (
+              <>
+                <h2>🎉 Resultados del Sorteo 🎉</h2>
+                <ul>
+                  {winners.map((winner, index) => (
+                    <li key={index}>
+                      <strong>{winner.name}:</strong>
+                      {Object.entries(winner.prizes).map(
+                        ([prize, quantity], i) => (
+                          <span key={prize}>
+                            {i > 0 && ", "}
+                            {prize} x {quantity}
+                          </span>
+                        )
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={() => setShowModal(false)}>Cerrar</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
