@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/SelectionPage.css"; // Estilos para esta página
+import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
 
 const SelectionPage = () => {
   const [cards, setCards] = useState([]);
@@ -265,8 +266,21 @@ const SelectionPage = () => {
                 <div className="chances-container">
                   <span>{card.chances}</span>
                   <div>
-                    <button onClick={() => increaseChances(card.id)}>+</button>
-                    <button onClick={() => decreaseChances(card.id)}>-</button>
+                    <button
+                      className="chances-button"
+                      onClick={() => increaseChances(card.id)}
+
+                    >
+                      <FaPlusCircle size={20} color="#2a9d8f" />
+                    </button>
+
+                    <button
+                      className="chances-button"
+                      onClick={() => decreaseChances(card.id)}
+
+                    >
+                      <FaMinusCircle size={20} color="#e63946" />
+                    </button>
                   </div>
                 </div>
               </li>
@@ -292,8 +306,18 @@ const SelectionPage = () => {
                 <div className="chances-container">
                   <span>{foodCard.chances}</span>
                   <div>
-                    <button onClick={() => increaseFood(foodCard.id)}>+</button>
-                    <button onClick={() => decreaseFood(foodCard.id)}>-</button>
+                    <button className="chances-button"
+                      onClick={() => increaseFood(foodCard.id)}
+                    >
+                      <FaMinusCircle size={20} color="#e63946" />
+                    </button>
+
+                    <button className="chances-button"
+                      onClick={() => increaseFood(foodCard.id)}
+                    >
+                      <FaPlusCircle size={20} color="#2a9d8f" />
+                    </button>
+
                   </div>
                 </div>
               </li>
@@ -325,15 +349,15 @@ const SelectionPage = () => {
 
       <div className="div6">
         <div className="container-button">
-          <button className="raffle-button" onClick={handleRaffle}>
+          <button className="extra-button" onClick={handleRaffle}>
             Realizar Sorteo
           </button>
 
-          <button className="clear-winners-button" onClick={clearWinners}>
+          <button className="extra-button" onClick={clearWinners}>
             Limpiar Sorteo
           </button>
 
-          <button className="reset-button" onClick={resetSelection}>
+          <button className="extra-button" onClick={resetSelection}>
             Reiniciar
           </button>
         </div>

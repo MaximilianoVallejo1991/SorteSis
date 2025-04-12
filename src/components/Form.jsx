@@ -28,7 +28,7 @@ function Form({ setNames, setPrizes, handleRaffle }) {
           onChange={(e) => setCurrentName(e.target.value)} 
           placeholder="Nombre del participante" 
         />
-        <button onClick={addName}>Agregar</button>
+        <button className="add-form-button" onClick={addName}>Agregar</button>
       </div>
       <div className="form-group">
         <label>Cantidad de Premios:</label>

@@ -187,6 +187,7 @@
 /* Contenedor de chances alineado a la derecha */
 .chances-container {
   display: flex;
+  width: 40%;
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -207,7 +208,7 @@
 
 /* Estilos para los botones */
 .chances-button {
-  background-color: #007bff;
+  background: none;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -274,4 +275,13 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.extra-button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
