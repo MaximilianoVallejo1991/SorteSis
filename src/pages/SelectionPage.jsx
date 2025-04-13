@@ -16,17 +16,19 @@ const SelectionPage = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [selectedFoodCards, setSelectedFoodCards] = useState([]);
   const [winners, setWinners] = useState([]); // Estado para mostrar ganadores
-  const navigate = useNavigate();
-
   const [showModal, setShowModal] = useState(false);
   const [isRaffling, setIsRaffling] = useState(false);
+  const [showCardsCarousel, setShowCardsCarousel] = useState(true);
+  const [showFoodCarousel, setShowFoodCarousel] = useState(true);
+
+  const navigate = useNavigate();
 
   const fetchFoodCards = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "food_cards"));
       const sortedFoodCards = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .sort((a, b) => 
+        .sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { numeric: true })
         );
       setFoodCards(sortedFoodCards);
@@ -212,39 +214,76 @@ const SelectionPage = () => {
     setWinners([]); // Limpiar solo la lista de ganadores
   };
 
+  const cardsCollapsed = !showCardsCarousel;
+  const foodCollapsed = !showFoodCarousel;
+  const offset = (cardsCollapsed ? 1 : 0) + (foodCollapsed ? 1 : 0);
+
   return (
     <div className="parent">
-      <div className="div1">
-        <Slider {...sliderSettingsCards}>
-          {cards.map((card) => (
-            <div
-              key={card.id}
-              className="carousel-item"
-              onClick={() => handleCardClick(card)}
-            >
-              <img src={card.imageUrl} alt={card.name} />
-              <p>{card.name}</p>
-            </div>
-          ))}
-        </Slider>
+      <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
+        <button
+          className="dropdown-button"
+          onClick={() => setShowCardsCarousel((prev) => !prev)}
+        >
+          {showCardsCarousel
+            ? "Ocultar Participantes"
+            : "Mostrar Participantes"}
+        </button>
+        <div
+          className={`collapsible ${
+            showCardsCarousel ? "expanded" : "collapsed"
+          }`}
+        >
+          <Slider {...sliderSettingsCards}>
+            {cards.map((card) => (
+              <div
+                key={card.id}
+                className="carousel-item"
+                onClick={() => handleCardClick(card)}
+              >
+                <img src={card.imageUrl} alt={card.name} />
+                <p>{card.name}</p>
+              </div>
+            ))}
+          </Slider>
+        </div>
+
         <button className="navigate-button" onClick={() => navigate("/upload")}>
           Modificar
         </button>
       </div>
 
-      <div className="div2">
-        <Slider {...sliderSettingsFood}>
-          {foodCards.map((foodCard) => (
-            <div
-              key={foodCard.id}
-              className="carousel-item"
-              onClick={() => handleFoodCardClick(foodCard)}
-            >
-              <img src={foodCard.imageUrl} alt={foodCard.name} />
-              <p>{foodCard.name}</p>
-            </div>
-          ))}
-        </Slider>
+      <div
+        className={`div2 ${!showFoodCarousel ? "collapsed" : ""} ${
+          !showCardsCarousel ? "elevated" : ""
+        }`}
+      >
+        <button
+          className="dropdown-button"
+          onClick={() => setShowFoodCarousel((prev) => !prev)}
+        >
+          {showFoodCarousel ? "Ocultar Premios" : "Mostrar Premios"}
+        </button>
+
+        <div
+          className={`collapsible ${
+            showFoodCarousel ? "expanded" : "collapsed"
+          }`}
+        >
+          <Slider {...sliderSettingsFood}>
+            {foodCards.map((foodCard) => (
+              <div
+                key={foodCard.id}
+                className="carousel-item"
+                onClick={() => handleFoodCardClick(foodCard)}
+              >
+                <img src={foodCard.imageUrl} alt={foodCard.name} />
+                <p>{foodCard.name}</p>
+              </div>
+            ))}
+          </Slider>
+        </div>
+
         <button
           className="navigate-button"
           onClick={() => navigate("/foodUpload")}
@@ -253,7 +292,15 @@ const SelectionPage = () => {
         </button>
       </div>
 
-      <div className="div3">
+      <div
+        className={`div3 ${
+          !showCardsCarousel && !showFoodCarousel
+            ? "elevatedB"
+            : !showCardsCarousel || !showFoodCarousel
+            ? "elevated"
+            : ""
+        }`}
+      >
         <div className="header">
           <h3>Participantes</h3>
           <h3>Chances</h3>
@@ -267,11 +314,10 @@ const SelectionPage = () => {
                 </span>
                 <div className="chances-container">
                   <span>{card.chances}</span>
-                  <div>
+                  <div className="chace-buttons-container">
                     <button
                       className="chances-button"
                       onClick={() => increaseChances(card.id)}
-
                     >
                       <FaPlusCircle size={20} color="#2a9d8f" />
                     </button>
@@ -279,7 +325,6 @@ const SelectionPage = () => {
                     <button
                       className="chances-button"
                       onClick={() => decreaseChances(card.id)}
-
                     >
                       <FaMinusCircle size={20} color="#e63946" />
                     </button>
@@ -293,7 +338,15 @@ const SelectionPage = () => {
         )}
       </div>
 
-      <div className="div4">
+      <div
+        className={`div4 ${
+          !showCardsCarousel && !showFoodCarousel
+            ? "elevatedB"
+            : !showCardsCarousel || !showFoodCarousel
+            ? "elevated"
+            : ""
+        }`}
+      >
         <div className="header">
           <h3>Premios</h3>
           <h3>Cantidad</h3>
@@ -307,19 +360,20 @@ const SelectionPage = () => {
                 </span>
                 <div className="chances-container">
                   <span>{foodCard.chances}</span>
-                  <div>
-                    <button className="chances-button"
+                  <div className="chace-buttons-container">
+                    <button
+                      className="chances-button"
                       onClick={() => increaseFood(foodCard.id)}
                     >
                       <FaPlusCircle size={20} color="#2a9d8f" />
                     </button>
 
-                    <button className="chances-button"
+                    <button
+                      className="chances-button"
                       onClick={() => decreaseFood(foodCard.id)}
                     >
                       <FaMinusCircle size={20} color="#e63946" />
                     </button>
-
                   </div>
                 </div>
               </li>
@@ -329,7 +383,16 @@ const SelectionPage = () => {
           <p>Haz clic en una tarjeta para agregarla.</p>
         )}
       </div>
-      <div className="div5">
+
+      <div
+        className={`div5 ${
+          !showCardsCarousel && !showFoodCarousel
+            ? "elevatedB"
+            : !showCardsCarousel || !showFoodCarousel
+            ? "elevated"
+            : ""
+        }`}
+      >
         <h3>GANADORES</h3>
         {winners.length > 0 ? (
           <ul>
@@ -349,7 +412,15 @@ const SelectionPage = () => {
         )}
       </div>
 
-      <div className="div6">
+      <div
+        className={`div6 ${
+          !showCardsCarousel && !showFoodCarousel
+            ? "elevatedB"
+            : !showCardsCarousel || !showFoodCarousel
+            ? "elevated"
+            : ""
+        }`}
+      >
         <div className="container-button">
           <button className="extra-button" onClick={handleRaffle}>
             Realizar Sorteo
