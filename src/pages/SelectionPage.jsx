@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick-theme.css";
 import "../styles/SelectionPage.css"; // Estilos para esta página
 import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
 
+import RaffleModal from "../components/RaffleModal";
+
 const SelectionPage = () => {
   const [cards, setCards] = useState([]);
   const [foodCards, setFoodCards] = useState([]);
@@ -24,7 +26,7 @@ const SelectionPage = () => {
       const querySnapshot = await getDocs(collection(db, "food_cards"));
       const sortedFoodCards = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .sort((a, b) =>
+        .sort((a, b) => 
           a.name.localeCompare(b.name, undefined, { numeric: true })
         );
       setFoodCards(sortedFoodCards);
@@ -309,13 +311,13 @@ const SelectionPage = () => {
                     <button className="chances-button"
                       onClick={() => increaseFood(foodCard.id)}
                     >
-                      <FaMinusCircle size={20} color="#e63946" />
+                      <FaPlusCircle size={20} color="#2a9d8f" />
                     </button>
 
                     <button className="chances-button"
-                      onClick={() => increaseFood(foodCard.id)}
+                      onClick={() => decreaseFood(foodCard.id)}
                     >
-                      <FaPlusCircle size={20} color="#2a9d8f" />
+                      <FaMinusCircle size={20} color="#e63946" />
                     </button>
 
                   </div>
@@ -363,38 +365,12 @@ const SelectionPage = () => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            {isRaffling ? (
-              <div className="raffle-animation">
-                <p>Sorteando...</p>
-                <div className="spinner"></div>
-              </div>
-            ) : (
-              <>
-                <h2>🎉 Resultados del Sorteo 🎉</h2>
-                <ul>
-                  {winners.map((winner, index) => (
-                    <li key={index}>
-                      <strong>{winner.name}:</strong>
-                      {Object.entries(winner.prizes).map(
-                        ([prize, quantity], i) => (
-                          <span key={prize}>
-                            {i > 0 && ", "}
-                            {prize} x {quantity}
-                          </span>
-                        )
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                <button onClick={() => setShowModal(false)}>Cerrar</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      <RaffleModal
+        showModal={showModal}
+        isRaffling={isRaffling}
+        winners={winners}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };
