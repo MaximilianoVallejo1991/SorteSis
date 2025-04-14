@@ -221,14 +221,8 @@ const SelectionPage = () => {
   return (
     <div className="parent">
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
-        <button
-          className="dropdown-button"
-          onClick={() => setShowCardsCarousel((prev) => !prev)}
-        >
-          {showCardsCarousel
-            ? "Ocultar Participantes"
-            : "Mostrar Participantes"}
-        </button>
+
+
         <div
           className={`collapsible ${
             showCardsCarousel ? "expanded" : "collapsed"
@@ -248,9 +242,21 @@ const SelectionPage = () => {
           </Slider>
         </div>
 
-        <button className="navigate-button" onClick={() => navigate("/upload")}>
-          Modificar
-        </button>
+        <div className="buttons-container">
+          <button
+            className="dropdown-button"
+            onClick={() => setShowCardsCarousel((prev) => !prev)}
+          >
+            {showCardsCarousel ? "Ocultar" : "Mostrar"}
+          </button>
+
+          <button
+            className="navigate-button"
+            onClick={() => navigate("/upload")}
+          >
+            Modificar
+          </button>
+        </div>
       </div>
 
       <div
@@ -258,12 +264,7 @@ const SelectionPage = () => {
           !showCardsCarousel ? "elevated" : ""
         }`}
       >
-        <button
-          className="dropdown-button"
-          onClick={() => setShowFoodCarousel((prev) => !prev)}
-        >
-          {showFoodCarousel ? "Ocultar Premios" : "Mostrar Premios"}
-        </button>
+
 
         <div
           className={`collapsible ${
@@ -284,12 +285,22 @@ const SelectionPage = () => {
           </Slider>
         </div>
 
+
+        <div>
+        <button
+          className="dropdown-button"
+          onClick={() => setShowFoodCarousel((prev) => !prev)}
+        >
+          {showFoodCarousel ? "Ocultar" : "Mostrar"}
+        </button>
+
         <button
           className="navigate-button"
           onClick={() => navigate("/foodUpload")}
         >
           Modificar
         </button>
+        </div>
       </div>
 
       <div
@@ -314,7 +325,7 @@ const SelectionPage = () => {
                 </span>
                 <div className="chances-container">
                   <span>{card.chances}</span>
-                  <div className="chace-buttons-container">
+                  <div className="chance-buttons-container">
                     <button
                       className="chances-button"
                       onClick={() => increaseChances(card.id)}
@@ -360,7 +371,7 @@ const SelectionPage = () => {
                 </span>
                 <div className="chances-container">
                   <span>{foodCard.chances}</span>
-                  <div className="chace-buttons-container">
+                  <div className="chance-buttons-container">
                     <button
                       className="chances-button"
                       onClick={() => increaseFood(foodCard.id)}
@@ -391,7 +402,10 @@ const SelectionPage = () => {
             : !showCardsCarousel || !showFoodCarousel
             ? "elevated"
             : ""
+
         }`}
+        onClick={() => setShowModal(true)}
+        style= {{ cursor: "pointer"}}
       >
         <h3>GANADORES</h3>
         {winners.length > 0 ? (
