@@ -112,11 +112,7 @@
     margin-right: 22px;
   }
 
-  .slick-list{
-    margin: -12px;
-    padding: 0px 0px 50px 0px;
 
-  }
   
   .carousel-item img {
     width: 90%;
@@ -270,11 +266,20 @@
 .div1.collapsed,
 .div2.collapsed {
   grid-row: span 1 / span 1;
+  opacity: 0.2;
+  transform: scaleY(0.2);
+
+}
+
+.div1.collapsed:hover, .div2.collapsed:hover{
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 
 .div2.elevated{
   grid-row-start: 2;
+  
 
 }
 
@@ -340,5 +345,28 @@
 
 .div1, .div2 {
   transition: all 0.5s ease;
-  overflow: visible;
+  overflow: hidden;
+  
+}
+.slick-list{
+  margin: -12px;
+  padding: 0px 0px 50px 0px;
+
+} 
+
+.collapsible {
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+.collapsible.collapsed {
+  max-height: 25%;
+  opacity: 0.2;
+  transform: scaleY(0.2);
+}
+
+.collapsible.expanded {
+  max-height: 500px; /* Ajustá según tus necesidades */
+  opacity: 1;
+  transform: scaleY(1);
 }

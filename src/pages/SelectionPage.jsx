@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
@@ -20,6 +20,8 @@ const SelectionPage = () => {
   const [isRaffling, setIsRaffling] = useState(false);
   const [showCardsCarousel, setShowCardsCarousel] = useState(true);
   const [showFoodCarousel, setShowFoodCarousel] = useState(true);
+  const cardsSliderRef = useRef(null);
+  const foodSliderRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -214,33 +216,36 @@ const SelectionPage = () => {
     setWinners([]); // Limpiar solo la lista de ganadores
   };
 
-  const cardsCollapsed = !showCardsCarousel;
-  const foodCollapsed = !showFoodCarousel;
-  const offset = (cardsCollapsed ? 1 : 0) + (foodCollapsed ? 1 : 0);
+  const handleWheelScroll = (e, sliderRef) => {
+    if (sliderRef && sliderRef.slickNext) {
+      if (e.deltaY > 0) {
+        sliderRef.slickNext();
+      } else {
+        sliderRef.slickPrev();
+      }
+    }
+  };
 
   return (
     <div className="parent">
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
-
-
-        <div
-          className={`collapsible ${
-            showCardsCarousel ? "expanded" : "collapsed"
-          }`}
-        >
-          <Slider {...sliderSettingsCards}>
-            {cards.map((card) => (
-              <div
-                key={card.id}
-                className="carousel-item"
-                onClick={() => handleCardClick(card)}
-              >
-                <img src={card.imageUrl} alt={card.name} />
-                <p>{card.name}</p>
-              </div>
-            ))}
-          </Slider>
-        </div>
+        {showCardsCarousel && (
+          <div className="collapsible expanded"
+          onWheel={(e) => handleWheelScroll(e, cardsSliderRef.current)}>
+            <Slider ref={cardsSliderRef} {...sliderSettingsCards}>
+              {cards.map((card) => (
+                <div
+                  key={card.id}
+                  className="carousel-item"
+                  onClick={() => handleCardClick(card)}
+                >
+                  <img src={card.imageUrl} alt={card.name} />
+                  <p>{card.name}</p>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        )}
 
         <div className="buttons-container">
           <button
@@ -264,42 +269,38 @@ const SelectionPage = () => {
           !showCardsCarousel ? "elevated" : ""
         }`}
       >
-
-
-        <div
-          className={`collapsible ${
-            showFoodCarousel ? "expanded" : "collapsed"
-          }`}
-        >
-          <Slider {...sliderSettingsFood}>
-            {foodCards.map((foodCard) => (
-              <div
-                key={foodCard.id}
-                className="carousel-item"
-                onClick={() => handleFoodCardClick(foodCard)}
-              >
-                <img src={foodCard.imageUrl} alt={foodCard.name} />
-                <p>{foodCard.name}</p>
-              </div>
-            ))}
-          </Slider>
-        </div>
-
+        {showFoodCarousel && (
+          <div className="collapsible expanded"
+          onWheel={(e) => handleWheelScroll(e, foodSliderRef.current)}>
+            <Slider ref={foodSliderRef} {...sliderSettingsFood}>
+              {foodCards.map((foodCard) => (
+                <div
+                  key={foodCard.id}
+                  className="carousel-item"
+                  onClick={() => handleFoodCardClick(foodCard)}
+                >
+                  <img src={foodCard.imageUrl} alt={foodCard.name} />
+                  <p>{foodCard.name}</p>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        )}
 
         <div>
-        <button
-          className="dropdown-button"
-          onClick={() => setShowFoodCarousel((prev) => !prev)}
-        >
-          {showFoodCarousel ? "Ocultar" : "Mostrar"}
-        </button>
+          <button
+            className="dropdown-button"
+            onClick={() => setShowFoodCarousel((prev) => !prev)}
+          >
+            {showFoodCarousel ? "Ocultar" : "Mostrar"}
+          </button>
 
-        <button
-          className="navigate-button"
-          onClick={() => navigate("/foodUpload")}
-        >
-          Modificar
-        </button>
+          <button
+            className="navigate-button"
+            onClick={() => navigate("/foodUpload")}
+          >
+            Modificar
+          </button>
         </div>
       </div>
 
@@ -402,10 +403,9 @@ const SelectionPage = () => {
             : !showCardsCarousel || !showFoodCarousel
             ? "elevated"
             : ""
-
         }`}
         onClick={() => setShowModal(true)}
-        style= {{ cursor: "pointer"}}
+        style={{ cursor: "pointer" }}
       >
         <h3>GANADORES</h3>
         {winners.length > 0 ? (
