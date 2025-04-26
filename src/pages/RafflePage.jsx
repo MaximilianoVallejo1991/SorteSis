@@ -12,18 +12,12 @@ function RafflePage() {
   const [showModal, setShowModal] = useState(false);
   const [isRaffling, setIsRaffling] = useState(false);
 
-  const handleRaffle = () => {
-    if (names.length < prizes) {
-      alert("No hay suficientes participantes para los premios.");
-      return;
-    }
-
+  const handleRaffle = (generatedWinners) => {
     setShowModal(true);
     setIsRaffling(true);
-    setTimeout(() => {
-      const shuffled = [...names].sort(() => 0.5 - Math.random());
-      setWinners(shuffled.slice(0, prizes));
 
+    setTimeout(() => {
+      setWinners(generatedWinners);
       setIsRaffling(false);
     }, 3000);
   };

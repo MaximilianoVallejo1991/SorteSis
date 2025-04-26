@@ -171,11 +171,6 @@
     position: relative;
   }
 
-  li {
-
-    width: 90%;
-
-  }
 
 /* Estilo del encabezado de la sección */
 .header {
@@ -195,6 +190,7 @@
   padding: 8px 0 8px 8px;
   background: #ffffff;
   border-radius: 4px;
+  width: 90%;
 }
 
 /* Nombre del participante alineado a la izquierda */

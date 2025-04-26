@@ -15,11 +15,19 @@ function Form({ setNames, setPrizes, handleRaffle }) {
   };
 
   const startRaffle = () => {
+    if (participantList.length < currentPrizes) {
+      alert("No hay suficientes participantes para los premios.");
+      return;
+    }
+  
+    const shuffled = [...participantList].sort(() => 0.5 - Math.random());
+    const selectedWinners = shuffled.slice(0, currentPrizes);
+  
     setNames(participantList);
     setPrizes(currentPrizes);
-    handleRaffle();
+    handleRaffle(selectedWinners);
   };
-
+  
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       addName();
@@ -29,7 +37,6 @@ function Form({ setNames, setPrizes, handleRaffle }) {
   return (
     <div className="info-container">
       <div className="form-container">
-
         <div className="form-group">
           <label> Participantes: </label>
 
