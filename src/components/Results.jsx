@@ -10,7 +10,7 @@ function Results({ winners }) {
       ) : (
         <ul>
           {winners.map((winner, index) => (
-            <li key={index}>
+            <li className="list" key={index}>
               {index + 1}. {winner}
             </li>
           ))}
