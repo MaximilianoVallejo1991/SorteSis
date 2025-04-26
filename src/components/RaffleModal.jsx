@@ -4,6 +4,10 @@ import "../styles/RaffleModal.css";
 const RaffleModal = ({ showModal, isRaffling, winners, onClose }) => {
   if (!showModal) return null;
 
+
+  const isArrayOfStrings =
+    Array.isArray(winners) && typeof winners[0] === "string";
+  
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -12,11 +16,25 @@ const RaffleModal = ({ showModal, isRaffling, winners, onClose }) => {
             <p>Sorteando...</p>
             <div className="spinner"></div>
           </div>
+        ) : isArrayOfStrings ? (
+          <>
+           <h2>🎉 Resultados del Sorteo 🎉</h2>
+           <ol>
+              {winners.map((winner, index) => (
+                <li key={index}>
+                  <strong>{winner}</strong>
+                </li>
+              ))}
+            </ol>
+            <button className="extra-button" onClick={onClose}>
+              Cerrar
+            </button>
+          </>
         ) : (
           <>
             <h2>🎉 Resultados del Sorteo 🎉</h2>
             <ul>
-              {winners.map((winner, index) => (
+              {Array.isArray(winners) && winners.map((winner, index) => (
                 <li key={index}>
                   <strong>{winner.name}:</strong>
                   {Object.entries(winner.prizes).map(([prize, quantity], i) => (

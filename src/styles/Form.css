@@ -1,5 +1,5 @@
 .form-container {
-    margin: 2rem auto;
+    margin: 1rem auto auto auto;
     text-align: center;
   }
   
@@ -8,11 +8,15 @@
   }
   
   input {
+    margin-top: 8px;
     padding: 0.5rem;
-    margin-right: 0.5rem;
+    border-radius: 8px;
+    border: none;
+
+
   }
   
-  button .add-form-button {
+.start-button {
     padding: 0.5rem 1rem;
     background-color: #007bff;
     color: white;
@@ -22,7 +26,7 @@
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #245d99;
   }
   
   .info-container{
@@ -37,7 +41,7 @@
     display: grid;
     grid-auto-flow: column; /* Llenar primero verticalmente */
     grid-auto-rows: min-content;
-    grid-template-rows: repeat(8, auto); /* Máximo 8 filas */
+    grid-template-rows: repeat(6, auto); /* Máximo 8 filas */
     gap: 4px 4px;
   }
   
@@ -51,4 +55,20 @@
   .participant-list ul li{
     margin: 0;
   }
+
+  .icons {
+
+    padding: 16px 8px 8px 8px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .input-group {
+    display: flex;
+  }
+  
   

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Form.css";
+import { FaPlus } from "react-icons/fa";
+import { GrAchievement, GrUserAdd } from "react-icons/gr";
 
 function Form({ setNames, setPrizes, handleRaffle }) {
   const [currentName, setCurrentName] = useState("");
@@ -25,35 +27,42 @@ function Form({ setNames, setPrizes, handleRaffle }) {
   };
 
   return (
-
     <div className="info-container">
-
       <div className="form-container">
 
-        <h2>Agregar Participantes</h2>
         <div className="form-group">
-          <input
-            type="text"
-            value={currentName}
-            onChange={(e) => setCurrentName(e.target.value)}
-            onKeyDown={handleKeyPress}
-            placeholder="Nombre del participante"
-          />
-          <button className="add-form-button" onClick={addName}>Agregar</button>
+          <label> Participantes: </label>
+
+          <div className="input-group">
+            <GrUserAdd className="icons" />
+            <input
+              type="text"
+              value={currentName}
+              onChange={(e) => setCurrentName(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="Nombre del participante"
+            />
+            <FaPlus className="icons" onClick={addName} />
+          </div>
         </div>
+
         <div className="form-group">
           <label>Cantidad de Premios:</label>
-          <input
-            type="number"
-            value={currentPrizes}
-            onChange={(e) => setCurrentPrizes(Number(e.target.value))}
-            min="1"
-          />
+
+          <div className="input-group">
+            <GrAchievement className="icons" />
+            <input
+              type="number"
+              value={currentPrizes}
+              onChange={(e) => setCurrentPrizes(Number(e.target.value))}
+              min="1"
+            />
+          </div>
         </div>
+
         <button className="start-button" onClick={startRaffle}>
           Realizar Sorteo
         </button>
-
       </div>
 
       <div className="participant-list">
@@ -64,14 +73,8 @@ function Form({ setNames, setPrizes, handleRaffle }) {
           ))}
         </ul>
         {participantList.length === 0 && <p>No hay participantes.</p>}
-
-
       </div>
-
     </div>
-
-
-
   );
 }
 
