@@ -1,0 +1,26 @@
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s;
+  }
+  
+  .back-button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Ocultar en pantallas menores a 740px */
+  @media (max-width: 740px) {
+    .back-button {
+      display: none;
+    }
+  }
+  

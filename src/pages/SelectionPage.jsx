@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/SelectionPage.css"; // Estilos para esta página
 import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
-
+import BackButton from "../components/BackButton";
 import RaffleModal from "../components/RaffleModal";
 
 const SelectionPage = () => {
@@ -228,6 +228,7 @@ const SelectionPage = () => {
 
   return (
     <div className="parent">
+            <BackButton />
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
         {showCardsCarousel && (
           <div className="collapsible expanded"

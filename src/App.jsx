@@ -15,7 +15,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> 
         <Route path="/upload" element={<DataUpload />} /> 
-
         <Route path="/edit/:id" element={<EditCard />} />
         <Route path="/cardsPage" element={<CardsPage />} /> 
         <Route path="/rafflePage" element={<RafflePage />} /> 

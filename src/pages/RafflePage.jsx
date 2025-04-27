@@ -3,6 +3,7 @@ import Form from "../components/Form";
 import Results from "../components/Results";
 import "../styles/RafflePage.css";
 import RaffleModal from "../components/RaffleModal";
+import BackButton from "../components/BackButton";
 
 function RafflePage() {
   const [names, setNames] = useState([]);
@@ -24,6 +25,7 @@ function RafflePage() {
 
   return (
     <div className="raffle-page">
+      <BackButton />
       <h1 className="raffle-title">SORTEO MANUAL</h1>
       <Form
         setNames={setNames}
