@@ -6,7 +6,6 @@ import { uploadCard } from "../utils/firebaseUtils";
 import Card from "../components/Card";
 import "../styles/CardsPage.css";
 import "../styles/DataUpload.css";
-
 import { deleteCard } from "../utils/firebaseUtils"; // Asegúrate de importar la función correcta
 
 function DataUpload() {
@@ -16,29 +15,6 @@ function DataUpload() {
   const [cards, setCards] = useState([]);
   const navigate = useNavigate();
 
-  const sliderSettings = {
-    dots: true, // Muestra indicadores
-    infinite: true, // Cicla a través de los elementos
-    speed: 500,
-
-    slidesToShow: 6, // Cantidad de tarjetas visibles
-    slidesToScroll: 1,
-    swipe: true, // Habilita el swipe
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
 
   const handleDelete = async (id, imageUrl) => {
     const backendURL = import.meta.env.VITE_BACKEND_URL;
