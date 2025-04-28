@@ -3,7 +3,7 @@
     padding: 20px;
 }
 
-.card {
+.edited-card {
     display: inline-block;
     width: 300px;
     padding: 20px;
@@ -13,7 +13,9 @@
 }
 
 .image {
-    width: 100%;
+    width: 85%;
+    height: 150px;
+    object-fit: cover;
     border-radius: 10px;
     margin-bottom: 10px;
 }

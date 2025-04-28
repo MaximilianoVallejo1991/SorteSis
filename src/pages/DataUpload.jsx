@@ -9,14 +9,12 @@ import "../styles/DataUpload.css";
 
 import { deleteCard } from "../utils/firebaseUtils"; // Asegúrate de importar la función correcta
 
-
 function DataUpload() {
   const [name, setName] = useState("");
   const [phrase, setPhrase] = useState("");
   const [image, setImage] = useState(null);
   const [cards, setCards] = useState([]);
   const navigate = useNavigate();
-
 
   const sliderSettings = {
     dots: true, // Muestra indicadores
@@ -42,15 +40,14 @@ function DataUpload() {
     ],
   };
 
-
   const handleDelete = async (id, imageUrl) => {
-    
     const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-
-    const confirmDelete = window.confirm("¿Seguro que quieres eliminar esta tarjeta?");
+    const confirmDelete = window.confirm(
+      "¿Seguro que quieres eliminar esta tarjeta?"
+    );
     if (!confirmDelete) return;
-  
+
     try {
       await deleteCard(id, imageUrl, "cards");
       setCards(cards.filter((card) => card.id !== id)); // Actualizar el estado
@@ -59,16 +56,15 @@ function DataUpload() {
       console.error("Error al eliminar tarjeta:", error);
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const newCard = await uploadCard({ name, phrase, imageFile: image });
-  
+
       // Agregar la nueva tarjeta al estado
       setCards((prevCards) => [...prevCards, newCard]);
-  
+
       console.log("Tarjeta creada:", newCard);
       setName("");
       setPhrase("");
@@ -78,8 +74,6 @@ function DataUpload() {
       console.error("Error al crear tarjeta:", error);
     }
   };
-  
-
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -99,9 +93,7 @@ function DataUpload() {
   }, []);
 
   return (
-
     <div className="parent1">
-
       <div className="col1">
         <h1 className="title">Cargar Participante</h1>
         <form onSubmit={handleSubmit} className="data-upload">
@@ -125,20 +117,16 @@ function DataUpload() {
             required
           />
           <button type="submit">Guardar</button>
-          <button onClick={()=> navigate ("/selection")}>Regresar</button>
-
-
+          <button onClick={() => navigate("/selection")}>Regresar</button>
         </form>
       </div>
 
       <div className="col2">
         <h1>Participantes</h1>
 
-
         <div className="container1">
           {cards.map((card) => (
             <Card
-
               id={card.id} // Pasamos la ID del documento
               name={card.name}
               phrase={card.phrase}
@@ -149,15 +137,8 @@ function DataUpload() {
         </div>
 
 
-
-        <button className="navigate-button" onClick={() => navigate("/upload")}>
-          Agregar
-        </button>
-
       </div>
-
     </div>
-
   );
 }
 

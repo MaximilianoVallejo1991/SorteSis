@@ -61,7 +61,7 @@ function EditCard() {
 
   return (
     <div className="container">
-      <div className="card">
+      <div className="edited-card">
         <img src={oldImageUrl} alt="Imagen actual" className="image" />
         <form onSubmit={handleUpdate} className="form">
           <input 
