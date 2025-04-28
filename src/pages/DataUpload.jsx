@@ -4,7 +4,7 @@ import { db } from "../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { uploadCard } from "../utils/firebaseUtils";
 import Card from "../components/Card";
-import "../styles/CardsPage.css";
+
 import "../styles/DataUpload.css";
 import { deleteCard } from "../utils/firebaseUtils"; // Asegúrate de importar la función correcta
 
