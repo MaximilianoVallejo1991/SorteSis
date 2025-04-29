@@ -97,9 +97,11 @@ function EditCard() {
             <button type="submit" className="button-save">
               Guardar Cambios
             </button>
+
+            
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(collection === "cards" ? "/upload" : "/foodupload")}
               className="button-cancel"
             >
               Cancelar
