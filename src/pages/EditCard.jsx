@@ -52,7 +52,7 @@ function EditCard() {
         phrase: collection === "cards" ? phrase || undefined : undefined,
         imageFile: image || undefined,
         oldImageUrl,
-        collectionName: "cards",
+        collectionName: collection,
       });
 
       alert("Tarjeta actualizada correctamente");

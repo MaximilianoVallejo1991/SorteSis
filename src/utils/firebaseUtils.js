@@ -113,6 +113,7 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
 
       imageUrl = response.data.secure_url;
 
+      
       // Eliminar la imagen anterior en Cloudinary
       const publicId = getPublicIdFromUrl(oldImageUrl);
       await axios.post(
@@ -123,10 +124,19 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
         }
       );
     }
+    
+    const updatedData = {
+      name,
+      imageUrl,
+    };
 
+    if (collectionName === "cards") {
+      updatedData.phrase = phrase;
+    }
+    
     // Actualizar Firestore
     const docRef = doc(db, collectionName, id);
-    await updateDoc(docRef, { name, phrase, imageUrl });
+    await updateDoc(docRef, updatedData);
 
     console.log("Tarjeta actualizada correctamente.");
   } catch (error) {
