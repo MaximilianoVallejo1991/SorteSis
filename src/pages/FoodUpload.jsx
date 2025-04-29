@@ -106,6 +106,7 @@ function FoodUpload() {
               onDelete={() =>
                 handleDelete(foodCard.id, foodCard.imageUrl)
               }
+              collection="food_cards"
             />
           ))}
         </div>

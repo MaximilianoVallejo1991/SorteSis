@@ -6,7 +6,7 @@ import { updateCard } from "../utils/firebaseUtils";
 import "../styles/EditCard.css";
 
 function EditCard() {
-  const { id } = useParams(); // Obtener ID desde la URL
+  const { collection, id } = useParams(); // Obtener ID desde la URL
   const navigate = useNavigate();
 
   // Estados para los datos de la tarjeta
@@ -19,14 +19,17 @@ function EditCard() {
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const docRef = doc(db, "cards", id);
+        const docRef = doc(db, collection, id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const data = docSnap.data();
           setName(data.name || "");
-          setPhrase(data.phrase || "");
           setOldImageUrl(data.imageUrl || ""); // Guardamos la imagen actual
+
+          if (collection === "cards") {
+            setPhrase(data.phrase || "");
+          }
         } else {
           console.error("La tarjeta no existe");
         }
@@ -46,7 +49,7 @@ function EditCard() {
       await updateCard({
         id,
         name: name || undefined,
-        phrase: phrase || undefined,
+        phrase: collection === "cards" ? phrase || undefined : undefined,
         imageFile: image || undefined,
         oldImageUrl,
         collectionName: "cards",
@@ -64,31 +67,43 @@ function EditCard() {
       <div className="edited-card">
         <img src={oldImageUrl} alt="Imagen actual" className="image" />
         <form onSubmit={handleUpdate} className="form">
-          <input 
-            type="text" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            className="input" 
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input"
             placeholder="Nuevo nombre (opcional)"
           />
-          <textarea 
-            value={phrase} 
-            onChange={(e) => setPhrase(e.target.value)} 
-            className="textarea"
-            placeholder="Nueva frase (opcional)"
-          ></textarea>
+          {collection === "cards" && (
+            <textarea
+              value={phrase}
+              onChange={(e) => setPhrase(e.target.value)}
+              className="textarea"
+              placeholder="Nueva frase (opcional)"
+            ></textarea>
+          )}
+
+
           <label className="file-input-label">
             Subir nueva imagen
-            <input 
-              type="file" 
-              accept="image/*" 
-              onChange={(e) => setImage(e.target.files[0])} 
-              className="file-input" 
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="file-input"
             />
           </label>
           <div className="button-container">
-            <button type="submit" className="button-save">Guardar Cambios</button>
-            <button type="button" onClick={() => navigate("/")} className="button-cancel">Cancelar</button>
+            <button type="submit" className="button-save">
+              Guardar Cambios
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="button-cancel"
+            >
+              Cancelar
+            </button>
           </div>
         </form>
       </div>
