@@ -56,7 +56,7 @@ function EditCard() {
       });
 
       alert("Tarjeta actualizada correctamente");
-      navigate("/");
+      navigate(-1);
     } catch (error) {
       console.error("Error al actualizar la tarjeta:", error);
     }
@@ -65,7 +65,12 @@ function EditCard() {
   return (
     <div className="container">
       <div className="edited-card">
-        <img src={oldImageUrl} alt="Imagen actual" className="image" />
+        <img
+          src={image ? URL.createObjectURL(image) : oldImageUrl}
+          alt="Vista previa"
+          className="image"
+        />
+
         <form onSubmit={handleUpdate} className="form">
           <input
             type="text"
@@ -98,7 +103,7 @@ function EditCard() {
               Guardar Cambios
             </button>
 
-            
+
             <button
               type="button"
               onClick={() => navigate(collection === "cards" ? "/upload" : "/foodupload")}
