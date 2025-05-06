@@ -1,12 +1,33 @@
 import axios from "axios";
 import { db } from "../firebaseConfig";
-import { doc, getDoc, updateDoc, deleteDoc, collection, addDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc, collection, addDoc } from "firebase/firestore";
+
+
+export const getPublicIdFromUrl = (url) => {
+  try {
+    // Buscar la parte después de `/upload/` y quitar la extensión
+    const parts = url.split("/upload/")[1].split(".");
+    const pathWithoutExtension = parts[0]; // e.g., "v1743000043/cards/PRUEBA1_khdssc"
+
+    // Eliminar el prefijo `v##########/` si existe
+    const segments = pathWithoutExtension.split("/");
+    if (segments[0].startsWith("v")) {
+      segments.shift(); // Remueve "v1743000043"
+    }
+
+    return segments.join("/"); // Retorna "cards/PRUEBA1_khdssc"
+  } catch (err) {
+    console.error("Error extrayendo public_id:", err);
+    return null;
+  }
+};
+
 
 
 export const uploadCard = async ({ name, phrase, imageFile }) => {
   try {
 
-    const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 
     // Crear el FormData para subir la imagen
     const formData = new FormData();
@@ -38,6 +59,8 @@ export const uploadCard = async ({ name, phrase, imageFile }) => {
 
 export const uploadFoodCard = async ({ name, imageFile }) => {
   try {
+
+
     // Subir la imagen a Cloudinary
     const formData = new FormData();
     formData.append("file", imageFile);
@@ -69,7 +92,7 @@ export const deleteCard = async (id, imageUrl, collectionName) => {
   try {
 
     const backendURL = import.meta.env.VITE_BACKEND_URL;
-    
+
 
     const segments = imageUrl.split("/");
     const imageName = segments.pop().split(".")[0]; // Extrae el ID de la imagen
@@ -97,6 +120,7 @@ export const deleteCard = async (id, imageUrl, collectionName) => {
 
 export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, collectionName }) => {
   try {
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
     let imageUrl = oldImageUrl;
 
     // Si hay una nueva imagen, subimos a Cloudinary
@@ -113,18 +137,19 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
 
       imageUrl = response.data.secure_url;
 
-      
-      // Eliminar la imagen anterior en Cloudinary
+      //  Eliminar la imagen anterior en Cloudinary
       const publicId = getPublicIdFromUrl(oldImageUrl);
-      await axios.post(
-        `https://api.cloudinary.com/v1_1/dc3kybsmr/delete_by_token`,
-        {
-          public_id: `${collectionName}/${publicId}`,
-          api_key: "884664781914291",
-        }
-      );
+
+      const cloudinaryResponse = await axios.delete(`${backendURL}/delete-image`, {
+        data: { public_id: publicId },
+      });
+
+      if (!cloudinaryResponse.data.success) {
+        console.warn("No se pudo eliminar la imagen anterior de Cloudinary.");
+      }
     }
-    
+
+    // 🔹 Preparar y guardar los nuevos datos en Firestore
     const updatedData = {
       name,
       imageUrl,
@@ -133,8 +158,7 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
     if (collectionName === "cards") {
       updatedData.phrase = phrase;
     }
-    
-    // Actualizar Firestore
+
     const docRef = doc(db, collectionName, id);
     await updateDoc(docRef, updatedData);
 
@@ -144,4 +168,5 @@ export const updateCard = async ({ id, name, phrase, imageFile, oldImageUrl, col
     throw error;
   }
 };
+
 
