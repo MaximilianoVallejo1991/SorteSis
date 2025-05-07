@@ -14,6 +14,7 @@ function EditCard() {
   const [phrase, setPhrase] = useState("");
   const [image, setImage] = useState(null);
   const [oldImageUrl, setOldImageUrl] = useState(""); // URL de la imagen actual
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Cargar datos de la tarjeta desde Firestore
   useEffect(() => {
@@ -44,6 +45,7 @@ function EditCard() {
   // Manejar la actualización de la tarjeta
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsUpdating(true); // Comienza el estado de carga
 
     try {
       await updateCard({
@@ -59,6 +61,8 @@ function EditCard() {
       navigate(-1);
     } catch (error) {
       console.error("Error al actualizar la tarjeta:", error);
+    } finally {
+      setIsUpdating(false); // Termina el estado de carga
     }
   };
 
@@ -88,7 +92,6 @@ function EditCard() {
             ></textarea>
           )}
 
-
           <label className="file-input-label">
             Subir nueva imagen
             <input
@@ -103,10 +106,11 @@ function EditCard() {
               Guardar Cambios
             </button>
 
-
             <button
               type="button"
-              onClick={() => navigate(collection === "cards" ? "/upload" : "/foodupload")}
+              onClick={() =>
+                navigate(collection === "cards" ? "/upload" : "/foodupload")
+              }
               className="button-cancel"
             >
               Cancelar
@@ -114,6 +118,13 @@ function EditCard() {
           </div>
         </form>
       </div>
+      {isUpdating && (
+        <div className="overlay">
+          <div className="loading-modal">
+            <p>Actualizando tarjeta...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
