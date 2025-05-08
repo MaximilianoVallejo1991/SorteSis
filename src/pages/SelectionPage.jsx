@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -160,7 +160,7 @@ const SelectionPage = () => {
     setShowModal(true);
     setIsRaffling(true);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       let loosers = selectedCards.flatMap((card) =>
         Array(card.chances).fill(card.name)
       );
@@ -189,13 +189,34 @@ const SelectionPage = () => {
         loosers.splice(randomIndex, 1);
       }
 
-      setWinners(
-        Object.entries(assignedWinners).map(([name, prizes]) => ({
+      const finalWinners = Object.entries(assignedWinners).map(
+        ([name, prizes]) => ({
           name,
           prizes,
-        }))
+        })
       );
+    
+      setWinners(finalWinners);
       setIsRaffling(false);
+
+      try {
+        await addDoc(collection(db, "historial"), {
+          timestamp: Timestamp.now(),
+          participantes: selectedCards.map(({ id, name, chances }) => ({
+            id,
+            name,
+            chances,
+          })),
+          premios: selectedFoodCards.map(({ id, name, chances }) => ({
+            id,
+            name,
+            chances,
+          })),
+          ganadores: finalWinners,
+        });
+      } catch (error) {
+        console.error("Error al guardar el historial del sorteo:", error);
+      }
     }, 3000); // 3 segundos de animación
   };
 
@@ -228,11 +249,13 @@ const SelectionPage = () => {
 
   return (
     <div className="parent">
-            <BackButton />
+      <BackButton />
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
         {showCardsCarousel && (
-          <div className="collapsible expanded"
-          onWheel={(e) => handleWheelScroll(e, cardsSliderRef.current)}>
+          <div
+            className="collapsible expanded"
+            onWheel={(e) => handleWheelScroll(e, cardsSliderRef.current)}
+          >
             <Slider ref={cardsSliderRef} {...sliderSettingsCards}>
               {cards.map((card) => (
                 <div
@@ -243,7 +266,6 @@ const SelectionPage = () => {
                   <img src={card.imageUrl} alt={card.name} />
                   <p>{card.name}</p>
                   <div className="speech-bubble">{card.phrase}</div>
-
                 </div>
               ))}
             </Slider>
@@ -273,8 +295,10 @@ const SelectionPage = () => {
         }`}
       >
         {showFoodCarousel && (
-          <div className="collapsible expanded"
-          onWheel={(e) => handleWheelScroll(e, foodSliderRef.current)}>
+          <div
+            className="collapsible expanded"
+            onWheel={(e) => handleWheelScroll(e, foodSliderRef.current)}
+          >
             <Slider ref={foodSliderRef} {...sliderSettingsFood}>
               {foodCards.map((foodCard) => (
                 <div
