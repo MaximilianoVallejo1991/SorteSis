@@ -242,6 +242,8 @@ const SelectionPage = () => {
                 >
                   <img src={card.imageUrl} alt={card.name} />
                   <p>{card.name}</p>
+                  <div className="speech-bubble">{card.phrase}</div>
+
                 </div>
               ))}
             </Slider>

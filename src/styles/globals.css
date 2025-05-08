@@ -5,6 +5,11 @@ body {
     background-color: #0a6893;
     color: #333;
     box-sizing: border-box;
+    max-width: 1280px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+
   }
   
   h1 {

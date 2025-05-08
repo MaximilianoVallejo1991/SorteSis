@@ -63,13 +63,20 @@
   /* Carousel estilos */
   .carousel {
     
-    display: flex;
+    display: flex!important;
     gap: 8px; /* Asegura espacio entre tarjetas */
     padding: 8px; /* Evita que las tarjetas queden pegadas a los bordes */
   }
   
 
   .carousel-item {
+    display: flex!important;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;     /* Centra horizontalmente */
+    text-align: center;
+    position: relative;
     margin-top: 20px;
     width: 100%; /* Ocupa bien su slide */
     max-width: 150px; /* Opcional, para no excederse */
@@ -85,13 +92,21 @@
 
   }
 
+  .carousel-item div {
+    font-size: 1rem; /* 🔽 Tamaño más chico */
+
+    margin-top:12px;
+  
+    /* 🔽 Evita que el texto se desborde */
+
+  }
   .carousel-item p {
     font-size: 1rem; /* 🔽 Tamaño más chico */
     color: white;
     margin-top:12px;
   
     /* 🔽 Evita que el texto se desborde */
-    overflow: hidden;
+
     text-overflow: ellipsis;
 
 
@@ -366,3 +381,45 @@
   opacity: 1;
   transform: scaleY(1);
 }
+
+/* // */
+
+
+
+.speech-bubble {
+  position: absolute;
+  bottom: 10%; /* ← arriba del contenido principal */
+
+  justify-items: center;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0;
+  max-width: 80%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  font-size: 0.9rem;
+  white-space: normal; /* permite múltiples líneas */
+  word-wrap: break-word;
+  z-index: 10;
+  max-width: 100px; /* ← ancho fijo */
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #f1f1f1 transparent;
+}
+
+.carousel-item:hover .speech-bubble,
+.speech-bubble.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
