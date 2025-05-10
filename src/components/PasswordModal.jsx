@@ -23,7 +23,7 @@ const PasswordModal = ({ onConfirm, onClose }) => {
         <h2>Ingrese la clave</h2>
         <div className="password-input-container">
           <input
-            type={!showPassword ? "text" : "password"}
+            type={showPassword ? "text" : "password"}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Clave..."
@@ -34,7 +34,11 @@ const PasswordModal = ({ onConfirm, onClose }) => {
             onClick={() => setShowPassword(!showPassword)}
             aria-label="Mostrar/ocultar clave"
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            {showPassword ? 
+            <FaEye />
+            : 
+            <FaEyeSlash /> 
+            }
           </button>
         </div>
 
