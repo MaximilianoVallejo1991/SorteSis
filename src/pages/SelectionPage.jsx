@@ -234,7 +234,7 @@ const SelectionPage = () => {
       setIsRaffling(false);
 
       try {
-        await addDoc(collection(db, "history"), {
+        await addDoc(collection(db, "historial"), {
           timestamp: Timestamp.now(),
           participantes: selectedCards.map(({ id, name, chances }) => ({
             id,
