@@ -425,7 +425,7 @@
 
 
 
-.history-button{
+.history-button, .admin-button{
 
     position: fixed;
     top: 20px;

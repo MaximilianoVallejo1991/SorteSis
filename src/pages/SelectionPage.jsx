@@ -6,9 +6,11 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/SelectionPage.css"; // Estilos para esta página
-import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaMinusCircle, FaLock } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 import RaffleModal from "../components/RaffleModal";
+
+import PasswordModal from "../components/PasswordModal";
 
 const SelectionPage = () => {
   const [cards, setCards] = useState([]);
@@ -23,7 +25,39 @@ const SelectionPage = () => {
   const cardsSliderRef = useRef(null);
   const foodSliderRef = useRef(null);
 
+  const [showSecureModal, setShowSecureModal] = useState(false);
+  const [authValid, setAuthValid] = useState(false);
+
   const navigate = useNavigate();
+
+  //----------------------------------------------------------
+  // Modal de contraseña
+  useEffect(() => {
+    const timestamp = localStorage.getItem("adminAuthTimestamp");
+    if (timestamp) {
+      const now = Date.now();
+      const diff = now - parseInt(timestamp, 10);
+      const oneHour = 60 * 1000;
+      if (diff < oneHour) {
+        setAuthValid(true);
+      } else {
+        localStorage.removeItem("adminAuthTimestamp");
+      }
+    }
+  }, []);
+
+  const handleUnlockClick = () => {
+    setShowSecureModal(true);
+    console.log("handleUnlockClick");
+  };
+
+  const handleConfirm = () => {
+    localStorage.setItem("adminAuthTimestamp", Date.now().toString());
+    setAuthValid(true);
+    setShowSecureModal(false);
+  };
+
+  //----------------------------------------------------------
 
   const fetchFoodCards = async () => {
     try {
@@ -247,12 +281,29 @@ const SelectionPage = () => {
     }
   };
 
+
   return (
     <div className="parent">
       <BackButton to="/ " />
-      <button className="history-button" onClick={() => navigate("/History")}>
-        Historial 
-      </button>
+
+      {/* Botón del candado */}
+      {!authValid && (
+        <button className="admin-button" onClick={handleUnlockClick}>
+          <FaLock /> Admin
+        </button>
+      )}
+
+      {authValid && (
+        <div>
+          <button
+            className="history-button"
+            onClick={() => navigate("/history")}
+          >
+            Historial
+          </button>
+        </div>
+      )}
+
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
         {showCardsCarousel && (
           <div
@@ -283,12 +334,17 @@ const SelectionPage = () => {
             {showCardsCarousel ? "Ocultar" : "Mostrar"}
           </button>
 
-          <button
-            className="navigate-button"
-            onClick={() => navigate("/upload")}
-          >
-            Modificar
-          </button>
+          {authValid && (
+            <div>
+              <button
+                className="navigate-button"
+                onClick={() => navigate("/upload")}
+              >
+                Modificar
+              </button>
+            </div>
+          )}
+
         </div>
       </div>
 
@@ -325,12 +381,16 @@ const SelectionPage = () => {
             {showFoodCarousel ? "Ocultar" : "Mostrar"}
           </button>
 
-          <button
-            className="navigate-button"
-            onClick={() => navigate("/foodUpload")}
-          >
-            Modificar
-          </button>
+          {authValid && (
+            <div>
+              <button
+                className="navigate-button"
+                onClick={() => navigate("/foodUpload")}
+              >
+                Modificar
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -486,6 +546,14 @@ const SelectionPage = () => {
         winners={winners}
         onClose={() => setShowModal(false)}
       />
+
+      {/* Modal para la clave */}
+      {showSecureModal && (
+        <PasswordModal
+          onConfirm={handleConfirm}
+          onClose={() => setShowSecureModal(false)}
+        />
+      )}
     </div>
   );
 };

@@ -52,15 +52,15 @@ function History() {
           return (
             <div key={item.id} className="history-item">
               <div
-                {...(isExpanded ? "expanded" : "")}
+                {...(isExpanded ? "detail" : "")}
                 className={`history-item-header ${
-                  isExpanded ? "expanded" : ""
+                  isExpanded ? "detail" : ""
                 }`}
                 onClick={() => toggleDetail(item.id)}
               >
-                <h3>Sorteo #{history.length - index} - </h3>
-                <h3>fecha:</h3>
-                <h3> {fecha} hs</h3>
+                <h3>Sorteo #{history.length - index} -</h3>
+                <h3> fecha </h3>
+                <h3>: {fecha} hs</h3>
               </div>
 
               {isExpanded && (
