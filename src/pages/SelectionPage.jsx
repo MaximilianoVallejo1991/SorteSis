@@ -195,12 +195,12 @@ const SelectionPage = () => {
           prizes,
         })
       );
-    
+
       setWinners(finalWinners);
       setIsRaffling(false);
 
       try {
-        await addDoc(collection(db, "historial"), {
+        await addDoc(collection(db, "history"), {
           timestamp: Timestamp.now(),
           participantes: selectedCards.map(({ id, name, chances }) => ({
             id,
@@ -249,7 +249,10 @@ const SelectionPage = () => {
 
   return (
     <div className="parent">
-      <BackButton />
+      <BackButton to="/ " />
+      <button className="history-button" onClick={() => navigate("/History")}>
+        Historial 
+      </button>
       <div className={`div1 ${!showCardsCarousel ? "collapsed" : ""}`}>
         {showCardsCarousel && (
           <div

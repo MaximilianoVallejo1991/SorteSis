@@ -7,6 +7,7 @@ import RafflePage from "./pages/RafflePage";
 import SelectionPage from "./pages/SelectionPage";
 import FoodUpload from "./pages/FoodUpload";
 import EditCard from "./pages/EditCard";
+import History from "./pages/History";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/rafflePage" element={<RafflePage />} /> 
         <Route path="/selection" element={<SelectionPage />} />
         <Route path="/foodUpload" element={<FoodUpload />} />
+        <Route path="/history" element={<History />} /> 
       </Routes>
     </Router>
   );

@@ -25,8 +25,8 @@ function RafflePage() {
 
   return (
     <div className="raffle-page">
-      <BackButton />
-      <h1 className="raffle-title">SORTEO MANUAL</h1>
+      <BackButton to="/" />
+      <h1 className="raffle-title">SORTEO</h1>
       <Form
         setNames={setNames}
         setPrizes={setPrizes}
